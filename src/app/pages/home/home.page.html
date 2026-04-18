@@ -1,16 +1,18 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn"></ion-menu-button>
+    </ion-buttons>
     <ion-title>
       <span class="app-title">نور <span class="app-title-en">NOOR</span></span>
     </ion-title>
+    <ion-buttons slot="end">
+      <div class="header-decoration"></div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="loadData($event)">
-    <ion-refresher-content pullingIcon="chevron-down" refreshingSpinner="crescent"></ion-refresher-content>
-  </ion-refresher>
-
+<ion-content [fullscreen]="true">
   <!-- Hero: Clock + Date + Hijri -->
   <div class="hero-section pattern-bg">
     <div class="hero-basmala">{{ basmala }}</div>
@@ -30,13 +32,13 @@
   </div>
 
   <!-- Today's Prayer Times -->
-  <div class="section-header">
+  <div class="section-header" *ngIf="prayerTimes">
     <span class="section-ornament">✦</span>
     <span class="section-title">Prayer Times</span>
     <span class="section-ornament">✦</span>
   </div>
 
-  <div class="prayer-grid" *ngIf="prayerTimes; else prayerLoading">
+  <div class="prayer-grid" *ngIf="prayerTimes">
     <div class="prayer-chip"
          *ngFor="let p of getPrayerList()"
          [class.active]="p.name === currentPrayer">
@@ -45,14 +47,6 @@
       <div class="prayer-chip-time">{{ p.time }}</div>
     </div>
   </div>
-
-  <ng-template #prayerLoading>
-    <div class="prayer-grid loading">
-      <div class="prayer-chip skeleton" *ngFor="let i of [1,2,3,4,5]">
-        <ion-skeleton-text animated style="height:14px;width:80%;border-radius:6px;"></ion-skeleton-text>
-      </div>
-    </div>
-  </ng-template>
 
   <!-- Quick Access Surahs -->
   <div class="section-header">

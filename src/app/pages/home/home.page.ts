@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonRefresher, IonRefresherContent, IonSkeletonText, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { PrayerService, PrayerTimes } from '../../services/prayer.service';
 import { QuranService, Surah } from '../../services/quran.service';
@@ -11,7 +11,7 @@ import { SettingsService } from '../../services/settings.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, IonContent, IonHeader, IonToolbar, IonTitle, IonRefresher, IonRefresherContent, IonSkeletonText, IonSpinner],
+  imports: [CommonModule, RouterModule, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonMenuButton],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
 })
@@ -22,7 +22,6 @@ export class HomePage implements OnInit, OnDestroy {
   currentPrayer = '';
   dailyVerse: any = null;
   dailyHadith: Hadith | null = null;
-  loading = true;
   private subs: Subscription[] = [];
 
   islamicGreeting = 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ';
@@ -55,8 +54,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnDestroy() { this.subs.forEach(s => s.unsubscribe()); }
 
-  loadData(event?: any) {
-    this.loading = true;
+  loadData() {
     const s = this.settings.get();
 
     // Load prayer times
@@ -88,8 +86,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.subs.push(
       this.hadithService.getRandomHadith().subscribe(h => {
         this.dailyHadith = h;
-        this.loading = false;
-        if (event) event.target.complete();
       })
     );
   }
