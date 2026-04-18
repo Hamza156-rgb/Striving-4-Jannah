@@ -35,12 +35,27 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angu
     ion-tab-bar {
       --background: #0d1626;
       border-top: 1px solid rgba(201,168,76,0.2);
+      height: 75px;
+      padding: 8px 0;
     }
     ion-tab-button {
       --color: #506480;
       --color-selected: #c9a84c;
+      --padding-bottom: 8px;
+      --padding-top: 8px;
+      --padding-start: 0;
+      --padding-end: 0;
     }
-    ion-label { font-size: 10px; font-family: 'Lato', sans-serif; }
+    ion-tab-button ion-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    ion-label { 
+      font-size: 12px; 
+      font-family: 'Lato', sans-serif; 
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
   `]
 })
 export class TabsPage {}

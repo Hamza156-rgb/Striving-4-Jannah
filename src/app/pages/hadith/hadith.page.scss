@@ -1,5 +1,16 @@
 ion-title { font-family: 'Scheherazade New', serif; font-size: 22px; color: #c9a84c; }
-.lang-toolbar { --background: #0d1626; --min-height: 56px; padding: 8px 0; }
+
+ion-header ion-toolbar {
+  --background: #0d1626;
+  --border-color: transparent;
+}
+
+ion-header ion-toolbar:first-child {
+  --border-width: 0 0 1px 0;
+  --border-color: rgba(201,168,76,0.15);
+}
+
+.lang-toolbar { --min-height: 56px; padding: 8px 0; }
 
 ion-content {
   --padding-bottom: 80px;
