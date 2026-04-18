@@ -20,7 +20,10 @@ export class HadithPage implements OnInit {
   hadiths: Hadith[] = [];
   loading = true;
   loadingRandom = false;
+  loadingMore = false;
   language: 'english' | 'arabic' | 'urdu' = 'english';
+  currentPage = 1;
+  currentBook = '';
 
   books = [
     { id: 'sahih-bukhari', name: 'Sahih Al-Bukhari', arabicName: 'صحيح البخاري', count: '7276' },
@@ -45,8 +48,10 @@ export class HadithPage implements OnInit {
 
   selectBook(bookId: string) {
     this.loading = true;
+    this.currentPage = 1;
+    this.currentBook = bookId;
     console.log('Loading hadiths for book:', bookId);
-    this.hadithService.getHadiths(bookId).subscribe({
+    this.hadithService.getHadiths(bookId, this.currentPage).subscribe({
       next: (hadiths) => {
         console.log('Received hadiths:', hadiths);
         console.log('Hadiths array length:', hadiths?.length);
@@ -63,6 +68,38 @@ export class HadithPage implements OnInit {
       error: (err) => {
         console.error('Error loading hadiths:', err);
         this.loadFallbackHadiths();
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  loadMore() {
+    console.log('loadMore called');
+    console.log('currentBook:', this.currentBook);
+    console.log('currentPage:', this.currentPage);
+    if (!this.currentBook) {
+      console.log('No current book, returning');
+      return;
+    }
+    this.loadingMore = true;
+    this.currentPage++;
+    console.log('Loading more hadiths for book:', this.currentBook, 'page:', this.currentPage);
+    this.hadithService.getHadiths(this.currentBook, this.currentPage).subscribe({
+      next: (hadiths) => {
+        console.log('Received more hadiths:', hadiths);
+        console.log('More hadiths array length:', hadiths?.length);
+        if (hadiths && hadiths.length > 0) {
+          this.hadiths = [...this.hadiths, ...hadiths];
+          console.log('Total hadiths after append:', this.hadiths.length);
+        } else {
+          console.log('No hadiths received, not appending');
+        }
+        this.loadingMore = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading more hadiths:', err);
+        this.loadingMore = false;
         this.cdr.detectChanges();
       }
     });

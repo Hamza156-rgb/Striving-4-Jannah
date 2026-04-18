@@ -120,6 +120,18 @@ ion-content {
 
 .hadith-list { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
 
+.load-more-wrap { padding: 20px 16px; display: flex; justify-content: center; }
+.load-more-btn {
+  padding: 14px 28px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+  border: 1px solid rgba(201,168,76,0.3); color: #c9a84c;
+  font-size: 14px; font-weight: 600; font-family: 'Lato', sans-serif;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  &:active { background: rgba(201,168,76,0.2); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
 .hadith-card {
   background: linear-gradient(145deg, #162033, #1e2d45);
   border: 1px solid rgba(201,168,76,0.2);

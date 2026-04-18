@@ -65,5 +65,13 @@
     </div>
   </div>
 
+  <!-- Load More Button -->
+  <div class="load-more-wrap" *ngIf="!loading && hadiths.length > 0 && currentBook">
+    <button class="load-more-btn" (click)="loadMore()" [disabled]="loadingMore">
+      <ion-spinner *ngIf="loadingMore" name="crescent"></ion-spinner>
+      <span *ngIf="!loadingMore">Load More Hadiths</span>
+    </button>
+  </div>
+
   <div style="height:24px"></div>
 </ion-content>
