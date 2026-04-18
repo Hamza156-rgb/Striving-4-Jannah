@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -23,15 +23,15 @@ export class HadithPage implements OnInit {
   language: 'english' | 'arabic' | 'urdu' = 'english';
 
   books = [
-    { id: 'bukhari', name: 'Sahih Al-Bukhari', arabicName: 'صحيح البخاري', count: '7563' },
-    { id: 'muslim', name: 'Sahih Muslim', arabicName: 'صحيح مسلم', count: '7453' },
-    { id: 'abudawud', name: 'Sunan Abu Dawud', arabicName: 'سنن أبو داود', count: '5274' },
-    { id: 'tirmidhi', name: 'Jami At-Tirmidhi', arabicName: 'جامع الترمذي', count: '3956' },
-    { id: 'nasai', name: "Sunan An-Nasa'i", arabicName: 'سنن النسائي', count: '5761' },
-    { id: 'ibnmajah', name: 'Sunan Ibn Majah', arabicName: 'سنن ابن ماجه', count: '4341' }
+    { id: 'sahih-bukhari', name: 'Sahih Al-Bukhari', arabicName: 'صحيح البخاري', count: '7276' },
+    { id: 'sahih-muslim', name: 'Sahih Muslim', arabicName: 'صحيح مسلم', count: '7564' },
+    { id: 'abu-dawood', name: 'Sunan Abu Dawud', arabicName: 'سنن أبو داود', count: '5274' },
+    { id: 'al-tirmidhi', name: 'Jami At-Tirmidhi', arabicName: 'جامع الترمذي', count: '3956' },
+    { id: 'sunan-nasai', name: "Sunan An-Nasa'i", arabicName: 'سنن النسائي', count: '5761' },
+    { id: 'ibn-e-majah', name: 'Sunan Ibn Majah', arabicName: 'سنن ابن ماجه', count: '4341' }
   ];
 
-  constructor(private hadithService: HadithService) {}
+  constructor(private hadithService: HadithService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() { this.loadFallbackHadiths(); }
 
@@ -41,6 +41,31 @@ export class HadithPage implements OnInit {
     const hadiths = this.getDefaultHadiths();
     this.hadiths = hadiths;
     this.loading = false;
+  }
+
+  selectBook(bookId: string) {
+    this.loading = true;
+    console.log('Loading hadiths for book:', bookId);
+    this.hadithService.getHadiths(bookId).subscribe({
+      next: (hadiths) => {
+        console.log('Received hadiths:', hadiths);
+        console.log('Hadiths array length:', hadiths?.length);
+        console.log('First hadith:', hadiths?.[0]);
+        this.hadiths = hadiths;
+        console.log('this.hadiths after assignment:', this.hadiths);
+        console.log('this.hadiths.length:', this.hadiths?.length);
+        console.log('Set hadiths, setting loading to false');
+        this.loading = false;
+        console.log('Loading state after setting:', this.loading);
+        console.log('Final state - loading:', this.loading, 'hadiths.length:', this.hadiths?.length);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading hadiths:', err);
+        this.loadFallbackHadiths();
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   loadRandom(event?: any) {
@@ -75,7 +100,7 @@ export class HadithPage implements OnInit {
   private getDefaultHadiths(): Hadith[] {
     return [
       {
-        id: 1, hadithNumber: '1', bookSlug: 'bukhari', bookName: 'Sahih Al-Bukhari',
+        id: 1, hadithNumber: '1', bookSlug: 'sahih-bukhari', bookName: 'Sahih Al-Bukhari',
         englishNarrator: 'Narrated Umar ibn Al-Khattab (RA):',
         hadithEnglish: 'The Messenger of Allah (ﷺ) said: "Actions are according to intentions, and everyone will get what was intended. Whoever migrates for Allah and His Messenger, his migration will be for Allah and His Messenger."',
         hadithArabic: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ فَهِجْرَتُهُ إِلَى اللَّهِ وَرَسُولِهِ',
@@ -83,7 +108,7 @@ export class HadithPage implements OnInit {
         chapterName: 'How the Divine Revelation started'
       },
       {
-        id: 2, hadithNumber: '6018', bookSlug: 'bukhari', bookName: 'Sahih Al-Bukhari',
+        id: 2, hadithNumber: '6018', bookSlug: 'sahih-bukhari', bookName: 'Sahih Al-Bukhari',
         englishNarrator: 'Narrated Abu Hurairah (RA):',
         hadithEnglish: 'The Prophet (ﷺ) said, "Whoever believes in Allah and the Last Day should speak good or keep silent; and whoever believes in Allah and the Last Day should be generous to his neighbor."',
         hadithArabic: 'مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ، وَمَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيُكْرِمْ جَارَهُ',
@@ -91,7 +116,7 @@ export class HadithPage implements OnInit {
         chapterName: 'Good Manners'
       },
       {
-        id: 3, hadithNumber: '2442', bookSlug: 'muslim', bookName: 'Sahih Muslim',
+        id: 3, hadithNumber: '2442', bookSlug: 'sahih-muslim', bookName: 'Sahih Muslim',
         englishNarrator: 'Narrated Abu Hurairah (RA):',
         hadithEnglish: 'The Messenger of Allah (ﷺ) said: "Do not consider any act of kindness insignificant, even meeting your brother with a cheerful face."',
         hadithArabic: 'لَا تَحْقِرَنَّ مِنَ الْمَعْرُوفِ شَيْئًا وَلَوْ أَنْ تَلْقَى أَخَاكَ بِوَجْهٍ طَلْقٍ',
@@ -99,7 +124,7 @@ export class HadithPage implements OnInit {
         chapterName: 'Virtue and Doing Good'
       },
       {
-        id: 4, hadithNumber: '55', bookSlug: 'bukhari', bookName: 'Sahih Al-Bukhari',
+        id: 4, hadithNumber: '55', bookSlug: 'sahih-bukhari', bookName: 'Sahih Al-Bukhari',
         englishNarrator: 'Narrated Ibn Masud (RA):',
         hadithEnglish: 'A man asked the Prophet (ﷺ): "Which deed is the best?" He replied, "To offer the prayers at their early stated fixed times." The man asked, "What is next?" He replied, "To be good and dutiful to your parents." The man asked, "What is next?" He replied, "To participate in Jihad in Allah\'s Cause."',
         hadithArabic: 'أَيُّ الْعَمَلِ أَحَبُّ إِلَى اللَّهِ؟ قَالَ: الصَّلَاةُ عَلَى وَقْتِهَا. قُلْتُ: ثُمَّ أَيٌّ؟ قَالَ: بِرُّ الْوَالِدَيْنِ',
@@ -107,7 +132,7 @@ export class HadithPage implements OnInit {
         chapterName: 'Times of the Prayers'
       },
       {
-        id: 5, hadithNumber: '2609', bookSlug: 'muslim', bookName: 'Sahih Muslim',
+        id: 5, hadithNumber: '2609', bookSlug: 'sahih-muslim', bookName: 'Sahih Muslim',
         englishNarrator: 'Narrated Abu Hurairah (RA):',
         hadithEnglish: 'The Messenger of Allah (ﷺ) said: "The strong man is not the one who can wrestle others down. The strong man is the one who can control himself when angry."',
         hadithArabic: 'لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ',

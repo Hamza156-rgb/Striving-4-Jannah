@@ -1,0 +1,8 @@
+{
+  "/api/hadiths": {
+    "target": "https://hadithapi.com/api/hadiths",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

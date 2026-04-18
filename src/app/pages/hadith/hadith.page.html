@@ -14,7 +14,7 @@
 <ion-content>
   <!-- Books Banner -->
   <div class="books-scroll">
-    <div class="book-pill" *ngFor="let b of books">
+    <div class="book-pill" *ngFor="let b of books" (click)="selectBook(b.id)">
       <div class="book-pill-arabic">{{ b.arabicName }}</div>
       <div class="book-pill-name">{{ b.name }}</div>
       <div class="book-pill-count">{{ b.count }}</div>
