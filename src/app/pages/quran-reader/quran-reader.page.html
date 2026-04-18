@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/quran" color="medium"></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="detail">
+    <ion-title *ngIf="detail" style="display: flex; align-items: center;">
       <span class="reader-title">{{ detail.surah.englishName }}</span>
       <span class="reader-arabic-title">{{ detail.surah.name }}</span>
     </ion-title>
