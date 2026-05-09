@@ -6,9 +6,16 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:web": "ng build noor-app --configuration development",
+    "cap:sync": "cap sync android",
+    "android:assets": "capacitor-assets generate --android",
+    "android:debug": "ng build noor-app --configuration development && cap sync android && cd android && JAVA_HOME=\"${JAVA_HOME:-/usr/local/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home}\" ./gradlew assembleDebug"
   },
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "packageManager": "npm@10.9.7",
   "dependencies": {
     "@angular/common": "^21.2.0",
@@ -17,6 +24,7 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@capacitor/android": "8.3.3",
     "@capacitor/app": "^8.1.0",
     "@capacitor/cli": "^8.3.1",
     "@capacitor/core": "^8.3.1",
@@ -31,6 +39,7 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@capacitor/assets": "3.0.5",
     "@angular/build": "^21.2.7",
     "@angular/cli": "^21.2.7",
     "@angular/compiler-cli": "^21.2.0",
