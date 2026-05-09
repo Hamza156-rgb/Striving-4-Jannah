@@ -120,7 +120,8 @@ ion-content {
 
 .hadith-list { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
 
-.load-more-wrap { padding: 20px 16px; display: flex; justify-content: center; }
+/* Inside .hadith-list: horizontal padding comes from parent; keep vertical spacing only */
+.load-more-wrap { padding: 8px 0 20px; display: flex; justify-content: center; }
 .load-more-btn {
   padding: 14px 28px; border-radius: 12px;
   background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));

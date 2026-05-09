@@ -21,8 +21,8 @@
     </div>
   </div>
 
-  <!-- Load Random Button -->
-  <div class="random-btn-wrap">
+  <!-- Random hadith only when not paging a collection (avoids a second “load” CTA above the list) -->
+  <div class="random-btn-wrap" *ngIf="!currentBook">
     <button class="random-btn" (click)="loadRandom()" [disabled]="loadingRandom">
       <ion-spinner *ngIf="loadingRandom" name="crescent"></ion-spinner>
       <span *ngIf="!loadingRandom">🎲 Load Random Hadith</span>
@@ -34,7 +34,7 @@
     <ion-spinner name="crescent"></ion-spinner>
   </div>
 
-  <!-- Hadith Cards -->
+  <!-- Hadith Cards + load more (single control, after last card) -->
   <div class="hadith-list" *ngIf="!loading">
     <div class="hadith-card" *ngFor="let h of hadiths">
       <!-- Header -->
@@ -66,14 +66,13 @@
         {{ getHadithText(h) }}
       </div>
     </div>
-  </div>
 
-  <!-- Load More Button -->
-  <div class="load-more-wrap" *ngIf="!loading && hadiths.length > 0 && currentBook">
-    <button class="load-more-btn" (click)="loadMore()" [disabled]="loadingMore">
-      <ion-spinner *ngIf="loadingMore" name="crescent"></ion-spinner>
-      <span *ngIf="!loadingMore">Load More Hadiths</span>
-    </button>
+    <div class="load-more-wrap" *ngIf="hadiths.length > 0 && currentBook">
+      <button class="load-more-btn" (click)="loadMore()" [disabled]="loadingMore">
+        <ion-spinner *ngIf="loadingMore" name="crescent"></ion-spinner>
+        <span *ngIf="!loadingMore">Load More Hadiths</span>
+      </button>
+    </div>
   </div>
 
   <div style="height:24px"></div>
