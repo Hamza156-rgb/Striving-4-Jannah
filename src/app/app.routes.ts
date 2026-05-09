@@ -15,7 +15,22 @@ export const routes: Routes = [
       },
       {
         path: 'hadith',
-        loadComponent: () => import('./pages/hadith/hadith.page').then(m => m.HadithPage)
+        loadComponent: () => import('./pages/hadith/hadith-shell.page').then(m => m.HadithShellPage),
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/hadith/hadith-books.page').then(m => m.HadithBooksPage)
+          },
+          {
+            path: ':bookSlug/:chapterNumber',
+            loadComponent: () =>
+              import('./pages/hadith/hadith-chapter-hadiths.page').then(m => m.HadithChapterHadithsPage)
+          },
+          {
+            path: ':bookSlug',
+            loadComponent: () => import('./pages/hadith/hadith-chapters.page').then(m => m.HadithChaptersPage)
+          }
+        ]
       },
       {
         path: 'prayer-times',

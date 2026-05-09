@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar class="hadith-toolbar">
+    <div class="nav-start" slot="start">
+      <a routerLink="/hadith" class="books-pill" aria-label="Back to books">
+        <span class="books-pill-arrow" aria-hidden="true">←</span>
+        <span class="books-pill-text">Books</span>
+      </a>
+    </div>
+    <ion-title class="hadith-toolbar-title">{{ bookTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="hadith-chapters-content">
+  <div class="chapters-hero">
+    <div class="hero-ar">أبواب الحديث</div>
+    <div class="hero-en">Chapters (Kitāb)</div>
+    <p class="hero-hint" *ngIf="!loading">Tap a chapter to read hadiths in this collection.</p>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <span class="loading-txt">Loading chapters…</span>
+  </div>
+
+  <p class="err" *ngIf="error && !loading">{{ error }}</p>
+
+  <div class="chapter-list" *ngIf="!loading">
+    <a
+      class="chapter-card"
+      *ngFor="let c of chapters; let i = index"
+      [routerLink]="['/hadith', bookSlug, c.chapterNumber]"
+    >
+      <div class="chapter-idx">{{ i + 1 }}</div>
+      <div class="chapter-main">
+        <div class="chapter-title">{{ chapterEnglish(c) }}</div>
+        <div class="chapter-urdu" *ngIf="c.chapterUrdu && chapterArabicLine(c) !== c.chapterUrdu">{{ c.chapterUrdu }}</div>
+      </div>
+      <div class="chapter-ar" *ngIf="chapterArabicLine(c)">{{ chapterArabicLine(c) }}</div>
+    </a>
+  </div>
+
+  <div class="page-pad"></div>
+</ion-content>

@@ -1,0 +1,261 @@
+:host {
+  --page-bg: var(--noor-bg-primary, #0a0e1a);
+}
+
+.hadith-chapters-content {
+  --background: linear-gradient(180deg, #080c18 0%, var(--page-bg) 28%);
+}
+
+.hadith-toolbar {
+  --background: #0d1626;
+  --border-width: 0 0 1px 0;
+  --border-color: rgba(201, 168, 76, 0.18);
+  --min-height: 56px;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.45), transparent);
+    pointer-events: none;
+  }
+}
+
+.hadith-toolbar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c9a84c;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.nav-start {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.books-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  margin: 0;
+  border-radius: 10px;
+  background: rgba(22, 32, 51, 0.95);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  color: #c9a84c;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.12s ease;
+  &:hover {
+    border-color: rgba(201, 168, 76, 0.55);
+    background: rgba(30, 45, 69, 0.98);
+  }
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.books-pill-arrow {
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.95;
+}
+
+.books-pill-text {
+  line-height: 1.2;
+}
+
+.chapters-hero {
+  background: linear-gradient(180deg, #080c18, #0d1626);
+  padding: 14px 16px 18px;
+  text-align: center;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+}
+
+.hero-ar {
+  position: relative;
+  z-index: 1;
+  font-family: 'Scheherazade New', serif;
+  font-size: 22px;
+  color: #e8c97a;
+  line-height: 1.2;
+}
+
+.hero-en {
+  position: relative;
+  z-index: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: #c9a84c;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.hero-hint {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #9aafcc;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 36px 16px;
+}
+
+.loading-txt {
+  font-size: 12px;
+  color: #9aafcc;
+}
+
+.err {
+  color: #e07a5f;
+  font-size: 13px;
+  padding: 16px;
+  text-align: center;
+}
+
+.chapter-list {
+  padding: 14px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chapter-card {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  background: linear-gradient(145deg, #162033, #1e2d45);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 16px;
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.55), transparent);
+    opacity: 0.85;
+  }
+  &:active {
+    transform: scale(0.99);
+    border-color: rgba(201, 168, 76, 0.45);
+    box-shadow: 0 6px 24px rgba(201, 168, 76, 0.08);
+  }
+}
+
+.chapter-idx {
+  flex-shrink: 0;
+  width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  background: rgba(10, 14, 26, 0.75);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c9a84c;
+  align-self: center;
+}
+
+.chapter-main {
+  flex: 1;
+  min-width: 0;
+  align-self: center;
+}
+
+.chapter-title {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0e8d5;
+  line-height: 1.35;
+}
+
+.chapter-urdu {
+  font-family: 'Scheherazade New', serif;
+  font-size: 13px;
+  color: #9aafcc;
+  margin-top: 6px;
+  line-height: 1.45;
+  direction: rtl;
+  text-align: left;
+}
+
+.chapter-ar {
+  flex-shrink: 0;
+  max-width: 44%;
+  align-self: center;
+  font-family: 'Scheherazade New', serif;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #e8c97a;
+  direction: rtl;
+  text-align: right;
+}
+
+.page-pad {
+  height: 28px;
+}
+
+@media (max-width: 480px) {
+  .books-pill {
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .chapter-card {
+    flex-wrap: wrap;
+  }
+  .chapter-ar {
+    max-width: 100%;
+    width: 100%;
+    text-align: right;
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(201, 168, 76, 0.1);
+  }
+}

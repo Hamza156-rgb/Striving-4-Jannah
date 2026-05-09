@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar class="hadith-toolbar">
+    <ion-title class="hadith-toolbar-title">الحديث الشريف</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="hadith-books-content">
+  <div class="books-hero">
+    <div class="hero-line"></div>
+    <p class="intro">Choose a collection, then a chapter (Kitāb), then read hadith — the same flow as classic hadith apps.</p>
+  </div>
+
+  <div class="books-grid">
+    <a class="book-card" *ngFor="let b of books" [routerLink]="[b.id]">
+      <div class="book-card-ar">{{ b.arabicName }}</div>
+      <div class="book-card-en">{{ b.name }}</div>
+      <div class="book-card-meta">{{ b.count }} hadiths</div>
+    </a>
+  </div>
+
+  <div class="random-wrap">
+    <button type="button" class="random-btn" (click)="loadRandom()" [disabled]="loadingRandom">
+      <ion-spinner *ngIf="loadingRandom" name="crescent"></ion-spinner>
+      <span *ngIf="!loadingRandom">🎲 Random hadith</span>
+    </button>
+  </div>
+
+  <div class="preview-card" *ngIf="previewHadith as h">
+    <div class="preview-head">
+      <span class="preview-book">{{ h.bookName }}</span>
+      <span class="preview-num"># {{ h.hadithNumber }}</span>
+    </div>
+    <div class="preview-ar" *ngIf="h.hadithArabic">{{ h.hadithArabic }}</div>
+    <div class="preview-en">{{ h.hadithEnglish }}</div>
+  </div>
+
+  <div class="page-pad"></div>
+</ion-content>

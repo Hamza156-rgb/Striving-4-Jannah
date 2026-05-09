@@ -1,0 +1,102 @@
+<ion-header class="hadith-read-header">
+  <ion-toolbar class="hadith-toolbar">
+    <div class="nav-start" slot="start">
+      <a [routerLink]="['/hadith', bookSlug]" class="chapters-pill" aria-label="Back to chapters">
+        <span class="chapters-pill-arrow" aria-hidden="true">←</span>
+        <span class="chapters-pill-text">Chapters</span>
+      </a>
+    </div>
+    <ion-title class="hadith-title-stack">
+      <div class="ts-ar">الحديث الشريف</div>
+      <div class="ts-book">{{ bookTitle }}</div>
+      <div class="ts-ch">الباب {{ chapterNumber }}</div>
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar class="lang-toolbar">
+    <div class="lang-pills" role="tablist" aria-label="Display language">
+      <button
+        type="button"
+        role="tab"
+        class="lang-pill"
+        [class.active]="language === 'english'"
+        [attr.aria-selected]="language === 'english'"
+        (click)="setLanguageDirect('english')"
+      >
+        English
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="lang-pill"
+        [class.active]="language === 'arabic'"
+        [attr.aria-selected]="language === 'arabic'"
+        (click)="setLanguageDirect('arabic')"
+      >
+        عربي
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="lang-pill"
+        [class.active]="language === 'urdu'"
+        [attr.aria-selected]="language === 'urdu'"
+        (click)="setLanguageDirect('urdu')"
+      >
+        اردو
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="hadith-read-content">
+  <div class="loading-wrap" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <span>Loading hadiths…</span>
+  </div>
+
+  <div class="hadith-list" *ngIf="!loading">
+    <div class="hadith-card" *ngFor="let h of hadiths">
+      <div class="hadith-card-header">
+        <div class="hadith-book">{{ h.bookName }}</div>
+        <div class="hadith-header-right">
+          <span class="hadith-status" *ngIf="h.status">{{ h.status }}</span>
+          <span class="hadith-num"># {{ h.hadithNumber }}</span>
+        </div>
+      </div>
+
+      <div class="hadith-chapter" *ngIf="h.chapterName">
+        <span class="ch-icon" aria-hidden="true">✦</span>
+        {{ h.chapterName }}
+      </div>
+
+      <div class="hadith-arabic-text" *ngIf="h.hadithArabic">{{ h.hadithArabic }}</div>
+
+      <div class="hadith-divider"></div>
+
+      <div class="hadith-narrator">{{ h.englishNarrator }}</div>
+
+      <div
+        class="hadith-translation"
+        *ngIf="language !== 'arabic'"
+        [class.rtl-text]="isRtl()"
+        [class.urdu-font]="language === 'urdu'"
+      >
+        {{ getHadithText(h) }}
+      </div>
+    </div>
+  </div>
+
+  <ion-infinite-scroll
+    *ngIf="!loading"
+    threshold="140px"
+    [disabled]="infiniteScrollDisabled"
+    (ionInfinite)="onInfinite($event)"
+  >
+    <ion-infinite-scroll-content
+      loadingSpinner="crescent"
+      loadingText="Loading hadiths…"
+    ></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <div class="page-pad"></div>
+</ion-content>
