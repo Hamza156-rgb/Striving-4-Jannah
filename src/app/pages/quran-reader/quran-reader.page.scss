@@ -1,9 +1,21 @@
+// Default toolbar slot (between start/end) + padding so titles don’t hug the viewport edge.
+.reader-toolbar-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  flex: 1;
+  min-width: 0;
+  padding-inline: 10px 12px;
+  padding-inline-end: max(12px, env(safe-area-inset-right));
+  box-sizing: border-box;
+}
+
 .reader-title { 
   font-family: 'Cinzel', serif; 
   font-size: 15px; 
   color: #f0e8d5;
   font-weight: 600;
-  margin-right: 12px;
   letter-spacing: 0.3px;
 }
 

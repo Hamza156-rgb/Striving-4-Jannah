@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
-  IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton,
+  IonContent, IonHeader, IonToolbar, IonButtons, IonBackButton,
   IonSkeletonText, IonSegment, IonSegmentButton, IonLabel, IonFab, IonFabButton, IonIcon
 } from '@ionic/angular/standalone';
 import { QuranService, SurahDetail } from '../../services/quran.service';
@@ -13,7 +13,7 @@ import { SettingsService } from '../../services/settings.service';
   selector: 'app-quran-reader',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule,
-    IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton,
+    IonContent, IonHeader, IonToolbar, IonButtons, IonBackButton,
     IonSkeletonText, IonSegment, IonSegmentButton, IonLabel, IonFab, IonFabButton, IonIcon],
   templateUrl: './quran-reader.page.html',
   styleUrls: ['./quran-reader.page.scss']

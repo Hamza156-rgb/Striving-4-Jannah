@@ -3,10 +3,10 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/quran" color="medium"></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="detail" style="display: flex; align-items: center;">
+    <div class="reader-toolbar-heading" *ngIf="detail">
       <span class="reader-title">{{ detail.surah.englishName }}</span>
       <span class="reader-arabic-title">{{ detail.surah.name }}</span>
-    </ion-title>
+    </div>
   </ion-toolbar>
   <ion-toolbar class="lang-toolbar">
     <ion-segment [value]="language" (ionChange)="changeLanguage($event)">
