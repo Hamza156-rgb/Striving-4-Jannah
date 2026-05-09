@@ -10,7 +10,10 @@ const config: CapacitorConfig = {
   plugins: {
     StatusBar: {
       style: 'DARK',
-      backgroundColor: '#0a0e1a'
+      backgroundColor: '#0a0e1a',
+      // Default is true; that lays out under the status bar and clashes with
+      // fitsSystemWindows / non-overlay window sizing — often shows as a black strip above the WebView on Android.
+      overlaysWebView: false
     },
     SplashScreen: {
       launchShowDuration: 2000,
