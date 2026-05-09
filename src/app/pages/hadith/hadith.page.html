@@ -59,10 +59,11 @@
       <!-- Narrator -->
       <div class="hadith-narrator">{{ h.englishNarrator }}</div>
 
-      <!-- Translation text based on language -->
+      <!-- English / Urdu (Arabic body is above; avoids duplicating Arabic when عربی is selected) -->
       <div class="hadith-translation"
+           *ngIf="language !== 'arabic'"
            [class.rtl-text]="isRtl()"
-           [class.urdu-font]="language==='urdu'">
+           [class.urdu-font]="language === 'urdu'">
         {{ getHadithText(h) }}
       </div>
     </div>

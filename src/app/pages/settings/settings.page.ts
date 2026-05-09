@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -24,7 +24,10 @@ export class SettingsPage implements OnInit {
     { value: 'urdu', label: 'Urdu', native: 'اردو' }
   ];
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.settings = { ...this.settingsService.get() };
@@ -33,8 +36,15 @@ export class SettingsPage implements OnInit {
 
   save() {
     this.settingsService.update(this.settings);
-    this.saved = true;
-    setTimeout(() => this.saved = false, 2000);
+    // Defer toast so `saved` does not flip in the same CD turn as the click (avoids NG0100 in dev).
+    setTimeout(() => {
+      this.saved = true;
+      this.cdr.detectChanges();
+      setTimeout(() => {
+        this.saved = false;
+        this.cdr.detectChanges();
+      }, 2000);
+    }, 0);
   }
 
   setLanguage(lang: string) {
