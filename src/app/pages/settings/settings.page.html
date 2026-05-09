@@ -45,6 +45,25 @@
     <button class="save-btn" (click)="save()">Save Location</button>
   </div>
 
+  <!-- Asr juristic school (Hanafi vs Shafi) -->
+  <div class="settings-section">
+    <div class="section-label">ASR TIME (JURISTIC SCHOOL)</div>
+    <div class="method-list">
+      <button class="method-option"
+              [class.selected]="settings.asrSchool === 1"
+              (click)="setAsrSchool(1)">
+        <span class="method-name">Hanafi (later Asr)</span>
+        <span class="method-check" *ngIf="settings.asrSchool === 1">✓</span>
+      </button>
+      <button class="method-option"
+              [class.selected]="settings.asrSchool === 0"
+              (click)="setAsrSchool(0)">
+        <span class="method-name">Shafi / Maliki (standard)</span>
+        <span class="method-check" *ngIf="settings.asrSchool === 0">✓</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Calculation Method -->
   <div class="settings-section">
     <div class="section-label">CALCULATION METHOD</div>

@@ -46,4 +46,9 @@ export class SettingsPage implements OnInit {
     this.settings.calculationMethod = id;
     this.save();
   }
+
+  setAsrSchool(school: 0 | 1) {
+    this.settings.asrSchool = school;
+    this.save();
+  }
 }

@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 export interface AppSettings {
   language: 'arabic' | 'english' | 'urdu';
   calculationMethod: number;
+  /** AlAdhan `school`: 0 = Shafi/Maliki (earlier Asr), 1 = Hanafi (later Asr) */
+  asrSchool: 0 | 1;
   city: string;
   country: string;
   theme: 'dark';
@@ -14,6 +16,7 @@ export class SettingsService {
   private defaults: AppSettings = {
     language: 'english',
     calculationMethod: 3,
+    asrSchool: 1,
     city: 'Makkah',
     country: 'SA',
     theme: 'dark'

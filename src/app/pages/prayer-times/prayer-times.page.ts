@@ -56,7 +56,7 @@ export class PrayerTimesPage implements OnInit, OnDestroy {
 
   loadByCity(event?: any) {
     this.loading = true; this.error = '';
-    this.prayerService.getPrayerTimesByCity(this.city, this.country, this.selectedMethod).subscribe({
+    this.prayerService.getPrayerTimesByCity(this.city, this.country, this.selectedMethod, this.settings.get().asrSchool).subscribe({
       next: pt => {
         this.prayerTimes = pt;
         this.currentPrayer = this.prayerService.getCurrentPrayer(pt);
@@ -72,7 +72,7 @@ export class PrayerTimesPage implements OnInit, OnDestroy {
     this.locationLoading = true;
     navigator.geolocation.getCurrentPosition(
       pos => {
-        this.prayerService.getPrayerTimesByCoords(pos.coords.latitude, pos.coords.longitude, this.selectedMethod).subscribe(pt => {
+        this.prayerService.getPrayerTimesByCoords(pos.coords.latitude, pos.coords.longitude, this.selectedMethod, this.settings.get().asrSchool).subscribe(pt => {
           this.prayerTimes = pt;
           this.currentPrayer = this.prayerService.getCurrentPrayer(pt);
           this.nextPrayer = this.prayerService.getNextPrayer(pt);

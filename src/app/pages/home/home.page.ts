@@ -61,7 +61,7 @@ export class HomePage implements OnInit, OnDestroy {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         pos => {
-          this.prayerService.getPrayerTimesByCoords(pos.coords.latitude, pos.coords.longitude, s.calculationMethod)
+          this.prayerService.getPrayerTimesByCoords(pos.coords.latitude, pos.coords.longitude, s.calculationMethod, s.asrSchool)
             .subscribe(pt => {
               this.prayerTimes = pt;
               this.nextPrayer = this.prayerService.getNextPrayer(pt);
@@ -91,7 +91,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private loadByCity(s: any) {
-    this.prayerService.getPrayerTimesByCity(s.city, s.country, s.calculationMethod)
+    this.prayerService.getPrayerTimesByCity(s.city, s.country, s.calculationMethod, s.asrSchool)
       .subscribe(pt => {
         this.prayerTimes = pt;
         this.nextPrayer = this.prayerService.getNextPrayer(pt);

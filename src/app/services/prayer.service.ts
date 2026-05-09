@@ -30,11 +30,11 @@ export class PrayerService {
     interval(1000).subscribe(() => this.currentTime$.next(new Date()));
   }
 
-  getPrayerTimesByCoords(lat: number, lng: number, method: number = 3): Observable<PrayerTimes> {
+  getPrayerTimesByCoords(lat: number, lng: number, method: number = 3, school: 0 | 1 = 1): Observable<PrayerTimes> {
     const today = new Date();
     const date = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
     return this.http.get<any>(
-      `${this.base}/timings/${date}?latitude=${lat}&longitude=${lng}&method=${method}`
+      `${this.base}/timings/${date}?latitude=${lat}&longitude=${lng}&method=${method}&school=${school}`
     ).pipe(
       map(r => ({
         Fajr: r.data.timings.Fajr,
@@ -50,11 +50,11 @@ export class PrayerService {
     );
   }
 
-  getPrayerTimesByCity(city: string, country: string, method: number = 3): Observable<PrayerTimes> {
+  getPrayerTimesByCity(city: string, country: string, method: number = 3, school: 0 | 1 = 1): Observable<PrayerTimes> {
     const today = new Date();
     const date = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
     return this.http.get<any>(
-      `${this.base}/timingsByCity/${date}?city=${city}&country=${country}&method=${method}`
+      `${this.base}/timingsByCity/${date}?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&method=${method}&school=${school}`
     ).pipe(
       map(r => ({
         Fajr: r.data.timings.Fajr,
