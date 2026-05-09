@@ -2,9 +2,32 @@
   <ion-toolbar>
     <ion-title>القرآن الكريم</ion-title>
   </ion-toolbar>
-  <!-- <ion-toolbar>
-    <ion-searchbar placeholder="Search Surah..." (ionInput)="search($event)" animated></ion-searchbar>
-  </ion-toolbar> -->
+  <ion-toolbar class="search-toolbar">
+    <div class="surah-search-field" role="search">
+      <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+      <input
+        type="search"
+        class="surah-search-input"
+        placeholder="Search surahs…"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchModelChange()"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        inputmode="search"
+        enterkeyhint="search"
+      />
+      <button
+        *ngIf="searchTerm"
+        type="button"
+        class="surah-search-clear"
+        (click)="clearSearch()"
+        aria-label="Clear search"
+      >
+        <ion-icon name="close-circle" aria-hidden="true"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
   <ion-toolbar class="filter-toolbar">
     <div class="tab-pills">
       <button class="pill" [class.active]="activeTab==='all'" (click)="setTab('all')">All</button>

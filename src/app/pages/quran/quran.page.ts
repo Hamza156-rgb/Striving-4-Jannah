@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonSearchbar, IonList, IonItem, IonLabel, IonSkeletonText, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonSkeletonText, IonIcon } from '@ionic/angular/standalone';
 import type { ViewWillEnter } from '@ionic/angular/common';
 import { finalize } from 'rxjs';
 import { QuranService, Surah } from '../../services/quran.service';
@@ -10,7 +10,7 @@ import { QuranService, Surah } from '../../services/quran.service';
 @Component({
   selector: 'app-quran',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, IonContent, IonHeader, IonToolbar, IonTitle, IonSearchbar, IonList, IonItem, IonLabel, IonSkeletonText, IonInfiniteScroll, IonInfiniteScrollContent],
+  imports: [CommonModule, RouterModule, FormsModule, IonContent, IonHeader, IonToolbar, IonTitle, IonSkeletonText, IonIcon],
   templateUrl: './quran.page.html',
   styleUrls: ['./quran.page.scss']
 })
@@ -58,9 +58,15 @@ export class QuranPage implements OnInit, ViewWillEnter {
     }
   }
 
-  search(ev: any) {
-    this.searchTerm = ev.detail.value || '';
+  onSearchModelChange() {
     this.applyFilter();
+    this.cdr.detectChanges();
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.applyFilter();
+    this.cdr.detectChanges();
   }
 
   setTab(tab: 'all' | 'meccan' | 'medinan') {
