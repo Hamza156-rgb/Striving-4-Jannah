@@ -65,6 +65,10 @@
   --ion-item-background: var(--noor-bg-card);
   --ion-card-background: var(--noor-bg-card);
   --ion-font-family: var(--font-body);
+
+  /* Safe areas: notch, status bar, home indicator (fallback 0 on older browsers) */
+  --noor-safe-top: env(safe-area-inset-top, 0px);
+  --noor-safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ========================================
@@ -203,12 +207,22 @@ ion-tab-button {
   }
 }
 
+/* Headers & toolbars clear system status / notch */
+ion-header {
+  padding-top: var(--noor-safe-top);
+}
+
 ion-toolbar {
   --background: #0d1626;
   --border-color: rgba(201,168,76,0.18);
   --border-width: 0 0 1px 0;
   --min-height: 44px;
   padding: 6px 12px;
+}
+
+/* Home (no ion-header): push hero below status bar */
+ion-content[fullscreen]::part(scroll) {
+  padding-top: var(--noor-safe-top);
 }
 
 ion-title {
@@ -220,6 +234,11 @@ ion-title {
 
 ion-content {
   --background: var(--noor-bg-primary);
+}
+
+/* Only tab shell pages sit above the bottom tab bar */
+ion-tabs ion-content {
+  --padding-bottom: calc(70px + var(--noor-safe-bottom));
 }
 
 ion-searchbar {

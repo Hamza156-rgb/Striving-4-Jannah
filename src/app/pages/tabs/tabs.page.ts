@@ -45,8 +45,10 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angu
     ion-tab-bar {
       --background: linear-gradient(180deg, #0d1626 0%, #0a0e1a 100%);
       border-top: 1px solid rgba(201,168,76,0.25);
-      height: 70px;
+      min-height: 70px;
+      height: auto;
       padding: 0;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
       backdrop-filter: blur(20px);
       box-shadow: 0 -2px 12px rgba(0,0,0,0.3);
       width: 100%;

@@ -140,10 +140,6 @@ ion-back-button::part(native):active {
   box-shadow: 0 4px 12px rgba(201,168,76,0.25) !important;
 }
 
-ion-content {
-  --padding-bottom: 60px;
-}
-
 .reader-controls {
   display: flex; gap: 6px; padding: 8px 12px; background: #0d1626;
   border-bottom: 1px solid rgba(201,168,76,0.1);
