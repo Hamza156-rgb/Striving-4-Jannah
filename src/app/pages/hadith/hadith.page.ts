@@ -5,6 +5,7 @@ import {
   IonContent, IonHeader, IonToolbar, IonTitle, IonSegment, IonSegmentButton,
   IonLabel, IonRefresher, IonRefresherContent, IonSpinner, IonFab, IonFabButton, IonIcon
 } from '@ionic/angular/standalone';
+import { finalize } from 'rxjs';
 import { HadithService, Hadith } from '../../services/hadith.service';
 
 @Component({
@@ -41,70 +42,89 @@ export class HadithPage implements OnInit {
 
   loadFallbackHadiths() {
     this.loading = true;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
     this.hadiths = this.getDefaultHadiths();
     this.loading = false;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   selectBook(bookId: string) {
     this.loading = true;
     this.currentPage = 1;
     this.currentBook = bookId;
-    this.cdr.markForCheck();
-    this.hadithService.getHadiths(bookId, this.currentPage).subscribe({
-      next: hadiths => {
-        this.hadiths = hadiths;
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loadFallbackHadiths();
-      }
-    });
+    this.cdr.detectChanges();
+    this.hadithService
+      .getHadiths(bookId, this.currentPage)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: hadiths => {
+          this.hadiths = hadiths;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.loadFallbackHadiths();
+        }
+      });
   }
 
   loadMore() {
     if (!this.currentBook) return;
     this.loadingMore = true;
     this.currentPage++;
-    this.cdr.markForCheck();
-    this.hadithService.getHadiths(this.currentBook, this.currentPage).subscribe({
-      next: hadiths => {
-        if (hadiths?.length) {
-          this.hadiths = [...this.hadiths, ...hadiths];
+    this.cdr.detectChanges();
+    this.hadithService
+      .getHadiths(this.currentBook, this.currentPage)
+      .pipe(
+        finalize(() => {
+          this.loadingMore = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: hadiths => {
+          if (hadiths?.length) {
+            this.hadiths = [...this.hadiths, ...hadiths];
+          }
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.currentPage = Math.max(1, this.currentPage - 1);
+          this.cdr.detectChanges();
         }
-        this.loadingMore = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loadingMore = false;
-        this.cdr.markForCheck();
-      }
-    });
+      });
   }
 
   loadRandom(event?: { target: { complete: () => void } }) {
     this.loadingRandom = true;
-    this.cdr.markForCheck();
-    this.hadithService.getRandomHadith().subscribe({
-      next: h => {
-        this.hadiths = [h, ...this.hadiths.slice(0, 9)];
-        this.loadingRandom = false;
-        this.cdr.markForCheck();
-        event?.target.complete();
-      },
-      error: () => {
-        this.loadingRandom = false;
-        this.cdr.markForCheck();
-        event?.target.complete();
-      }
-    });
+    this.cdr.detectChanges();
+    this.hadithService
+      .getRandomHadith()
+      .pipe(
+        finalize(() => {
+          this.loadingRandom = false;
+          this.cdr.detectChanges();
+          event?.target.complete();
+        })
+      )
+      .subscribe({
+        next: h => {
+          this.hadiths = [h, ...this.hadiths.slice(0, 9)];
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   setLanguage(ev: CustomEvent<{ value: 'english' | 'arabic' | 'urdu' }>) {
     this.language = ev.detail.value;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   getHadithText(h: Hadith): string {

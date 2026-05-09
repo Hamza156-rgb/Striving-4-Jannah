@@ -34,8 +34,10 @@ export class HadithService {
     return this.http.get<any>(url).pipe(
       map(r => {
         const data = r;
-        if (data && data.hadiths && data.hadiths.data) {
-          return data.hadiths.data.map((h: any) => this.mapHadithApi(h, book));
+        if (data && data.hadiths && Array.isArray(data.hadiths.data)) {
+          return data.hadiths.data
+            .filter((h: any) => h && typeof h === 'object')
+            .map((h: any) => this.mapHadithApi(h, book));
         }
         return this.getFallbackHadiths();
       }),
@@ -67,6 +69,17 @@ export class HadithService {
   }
 
   private mapHadithApi(d: any, book: string): Hadith {
+    if (!d || typeof d !== 'object') {
+      return {
+        id: Math.random(),
+        hadithNumber: '?',
+        englishNarrator: '',
+        hadithEnglish: '',
+        hadithArabic: '',
+        bookSlug: book,
+        bookName: this.getBookName(book)
+      };
+    }
     const rawStatus = d.status ?? d.hadithStatus ?? d.grade ?? d.authenticity;
     const status =
       rawStatus != null && String(rawStatus).trim() !== '' ? String(rawStatus).trim() : undefined;
