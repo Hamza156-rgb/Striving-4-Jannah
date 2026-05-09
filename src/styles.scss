@@ -207,9 +207,11 @@ ion-tab-button {
   }
 }
 
-/* Headers & toolbars clear system status / notch */
+/* Safe area: Ionic already applies padding-top on the first ion-toolbar in ion-header
+   (--ion-safe-area-top). Do not add padding on ion-header here — it doubles the inset and
+   leaves a transparent band (often reads as pure black on Android). */
 ion-header {
-  padding-top: var(--noor-safe-top);
+  background: #0d1626;
 }
 
 ion-toolbar {
@@ -220,10 +222,8 @@ ion-toolbar {
   padding: 6px 12px;
 }
 
-/* Home (no ion-header): push hero below status bar */
-ion-content[fullscreen]::part(scroll) {
-  padding-top: var(--noor-safe-top);
-}
+/* Home uses fullscreen ion-content; safe-area top is applied on .hero-section in home.page.scss
+   so the inset sits over the same background as the hero (no black strip). */
 
 ion-title {
   font-family: var(--font-heading);

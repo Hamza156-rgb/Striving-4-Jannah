@@ -85,7 +85,8 @@ ion-title {
 /* Hero */
 .hero-section {
   background: linear-gradient(180deg, rgba(8,12,24,0.8) 0%, rgba(13,22,38,0.9) 100%);
-  padding: 16px 16px 20px;
+  /* Status bar / notch: keep inset inside hero so padding is not a separate “black bar” */
+  padding: calc(16px + var(--noor-safe-top)) 16px 20px;
   text-align: center;
   position: relative;
   border-bottom: 1px solid rgba(201,168,76,0.2);
