@@ -21,17 +21,22 @@
     </div>
   </div>
 
-  <!-- Location Controls -->
+  <!-- Location: GPS first; city/country uses Aladhan timingsByCity when you tap Go -->
   <div class="controls-section">
+    <button type="button" class="gps-btn" (click)="loadByGPS()" [disabled]="locationLoading">
+      <ion-spinner *ngIf="locationLoading" name="crescent" style="width:16px;height:16px;"></ion-spinner>
+      <span *ngIf="!locationLoading">📍 Use my location</span>
+    </button>
+    <p class="location-hint">
+      Times use your place on Earth (sun position). This page tries GPS first; city and country are optional — enter both and tap Go if you
+      prefer not to use location (for example Karachi and PK).
+    </p>
+    <div class="manual-label">Optional — city &amp; country</div>
     <div class="ctrl-row">
       <input class="noor-input" [(ngModel)]="city" placeholder="City" />
-      <input class="noor-input" [(ngModel)]="country" placeholder="Country Code (e.g. PK)" />
-      <button class="ctrl-btn search-btn" (click)="updateCity()">Go</button>
+      <input class="noor-input" [(ngModel)]="country" placeholder="Country code (e.g. PK)" />
+      <button type="button" class="ctrl-btn search-btn" (click)="updateCity()">Go</button>
     </div>
-    <button class="gps-btn" (click)="loadByGPS()" [disabled]="locationLoading">
-      <ion-spinner *ngIf="locationLoading" name="crescent" style="width:16px;height:16px;"></ion-spinner>
-      <span *ngIf="!locationLoading">📍 Use My Location</span>
-    </button>
     <div class="error-msg" *ngIf="error">{{ error }}</div>
   </div>
 
