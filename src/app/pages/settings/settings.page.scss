@@ -37,21 +37,6 @@ ion-content {
   }
 }
 
-.lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
-.lang-option {
-  background: linear-gradient(145deg, #162033, #1e2d45);
-  border: 1px solid rgba(201,168,76,0.15); border-radius: 12px;
-  padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.2s;
-  .lang-native { font-family: 'Scheherazade New', serif; font-size: 18px; color: #e8c97a; }
-  .lang-label { font-size: 11px; color: #9aafcc; margin-top: 4px; }
-  &.selected {
-    background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.08));
-    border-color: rgba(201,168,76,0.5);
-    .lang-label { color: #c9a84c; }
-  }
-  &:active { opacity: 0.8; }
-}
-
 .input-group { margin-bottom: 12px; }
 .input-label { display: block; font-size: 11px; color: #9aafcc; margin-bottom: 6px; letter-spacing: 0.5px; }
 .noor-input {

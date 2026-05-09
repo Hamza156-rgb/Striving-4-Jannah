@@ -17,20 +17,6 @@
   <!-- Save Toast -->
   <div class="save-toast" [class.visible]="saved">✓ Settings saved</div>
 
-  <!-- Translation Language -->
-  <div class="settings-section">
-    <div class="section-label">QURAN & HADITH LANGUAGE</div>
-    <div class="lang-grid">
-      <button class="lang-option"
-              *ngFor="let l of languages"
-              [class.selected]="settings.language === l.value"
-              (click)="setLanguage(l.value)">
-        <div class="lang-native">{{ l.native }}</div>
-        <div class="lang-label">{{ l.label }}</div>
-      </button>
-    </div>
-  </div>
-
   <!-- Location Settings -->
   <div class="settings-section">
     <div class="section-label">PRAYER TIME LOCATION</div>

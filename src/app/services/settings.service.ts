@@ -2,24 +2,20 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 export interface AppSettings {
-  language: 'arabic' | 'english' | 'urdu';
   calculationMethod: number;
   /** AlAdhan `school`: 0 = Shafi/Maliki (earlier Asr), 1 = Hanafi (later Asr) */
   asrSchool: 0 | 1;
   city: string;
   country: string;
-  theme: 'dark';
 }
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private defaults: AppSettings = {
-    language: 'english',
     calculationMethod: 3,
     asrSchool: 1,
     city: 'Makkah',
-    country: 'SA',
-    theme: 'dark'
+    country: 'SA'
   };
 
   private settings$ = new BehaviorSubject<AppSettings>(this.load());
@@ -28,8 +24,21 @@ export class SettingsService {
   private load(): AppSettings {
     try {
       const s = localStorage.getItem('noor_settings');
-      return s ? { ...this.defaults, ...JSON.parse(s) } : { ...this.defaults };
-    } catch { return { ...this.defaults }; }
+      if (!s) return { ...this.defaults };
+      const raw = JSON.parse(s) as Record<string, unknown>;
+      const cm = raw['calculationMethod'];
+      const school = raw['asrSchool'];
+      const city = raw['city'];
+      const country = raw['country'];
+      return {
+        calculationMethod: typeof cm === 'number' ? cm : this.defaults.calculationMethod,
+        asrSchool: school === 0 || school === 1 ? school : this.defaults.asrSchool,
+        city: typeof city === 'string' ? city : this.defaults.city,
+        country: typeof country === 'string' ? country : this.defaults.country
+      };
+    } catch {
+      return { ...this.defaults };
+    }
   }
 
   get(): AppSettings { return this.settings$.value; }
