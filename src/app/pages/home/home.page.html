@@ -85,6 +85,7 @@
 
   <div class="noor-card daily-hadith" *ngIf="dailyHadith">
     <div class="hadith-book-badge">{{ dailyHadith.bookName }}</div>
+    <div class="hadith-status-pill" *ngIf="dailyHadith.status">{{ dailyHadith.status }}</div>
     <div class="arabic-text arabic-medium hadith-arabic" *ngIf="dailyHadith.hadithArabic">
       {{ dailyHadith.hadithArabic }}
     </div>

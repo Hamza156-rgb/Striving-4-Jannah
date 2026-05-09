@@ -3,7 +3,7 @@
     <ion-title>الحديث الشريف</ion-title>
   </ion-toolbar> -->
   <ion-toolbar class="lang-toolbar">
-    <ion-segment value="english" (ionChange)="setLanguage($event)">
+    <ion-segment [value]="language" (ionChange)="setLanguage($event)">
       <ion-segment-button value="english"><ion-label>English</ion-label></ion-segment-button>
       <ion-segment-button value="arabic"><ion-label>عربي</ion-label></ion-segment-button>
       <ion-segment-button value="urdu"><ion-label>اردو</ion-label></ion-segment-button>
@@ -40,7 +40,10 @@
       <!-- Header -->
       <div class="hadith-card-header">
         <div class="hadith-book">{{ h.bookName }}</div>
-        <div class="hadith-num"># {{ h.hadithNumber }}</div>
+        <div class="hadith-header-right">
+          <span class="hadith-status" *ngIf="h.status">{{ h.status }}</span>
+          <span class="hadith-num"># {{ h.hadithNumber }}</span>
+        </div>
       </div>
 
       <!-- Chapter -->

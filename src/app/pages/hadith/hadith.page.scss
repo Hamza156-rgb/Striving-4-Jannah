@@ -144,8 +144,34 @@ ion-content {
   }
 }
 
-.hadith-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.hadith-book { font-family: 'Cinzel', serif; font-size: 12px; color: #25c79a; letter-spacing: 0.5px; }
+.hadith-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.hadith-book { font-family: 'Cinzel', serif; font-size: 12px; color: #25c79a; letter-spacing: 0.5px; flex: 1; min-width: 0; }
+.hadith-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.hadith-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #c9a84c;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  padding: 4px 9px;
+  border-radius: 8px;
+  text-transform: capitalize;
+  max-width: 100%;
+  text-align: center;
+}
 .hadith-num { font-size: 11px; color: #506480; }
 .hadith-chapter { font-size: 11px; color: #9aafcc; margin-bottom: 12px; }
 

@@ -12,6 +12,8 @@ export interface Hadith {
   bookSlug: string;
   bookName: string;
   chapterName?: string;
+  /** e.g. Sahih, Hasan, Da'if — from API `status` when present */
+  status?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -29,24 +31,17 @@ export class HadithService {
   getHadiths(book: string = 'sahih-bukhari', page: number = 1): Observable<Hadith[]> {
     const apiUrl = `${this.base}/hadiths/?apiKey=${this.apiKey}&book=${book}&page=${page}&limit=10`;
     const url = `${this.corsProxy}${encodeURIComponent(apiUrl)}`;
-    console.log('Fetching hadiths from:', url);
     return this.http.get<any>(url).pipe(
       map(r => {
-        console.log('API response:', r);
-        // corsproxy.io returns data directly
         const data = r;
         if (data && data.hadiths && data.hadiths.data) {
-          const mapped = data.hadiths.data.map((h: any) => this.mapHadithApi(h, book));
-          console.log('Mapped hadiths:', mapped);
-          return mapped;
+          return data.hadiths.data.map((h: any) => this.mapHadithApi(h, book));
         }
-        console.log('Using fallback hadiths');
         return this.getFallbackHadiths();
       }),
-      catchError((err) => {
-        console.error('API error:', err);
-        return of(this.getFallbackHadiths().filter(h => h.bookSlug === book || book === 'sahih-bukhari'));
-      })
+      catchError(() =>
+        of(this.getFallbackHadiths().filter(h => h.bookSlug === book || book === 'sahih-bukhari'))
+      )
     );
   }
 
@@ -54,7 +49,9 @@ export class HadithService {
     const books = ['sahih-bukhari', 'sahih-muslim', 'abu-dawood', 'al-tirmidhi', 'sunan-nasai', 'ibn-e-majah'];
     const book = books[Math.floor(Math.random() * books.length)];
     const randomPage = Math.floor(Math.random() * 100) + 1;
-    return this.http.get<any>(`${this.base}/hadiths/?apiKey=${this.apiKey}&book=${book}&page=${randomPage}&limit=1`).pipe(
+    const apiUrl = `${this.base}/hadiths/?apiKey=${this.apiKey}&book=${book}&page=${randomPage}&limit=1`;
+    const url = `${this.corsProxy}${encodeURIComponent(apiUrl)}`;
+    return this.http.get<any>(url).pipe(
       map(r => {
         if (r && r.hadiths && r.hadiths.data && r.hadiths.data.length > 0) {
           return this.mapHadithApi(r.hadiths.data[0], book);
@@ -70,6 +67,9 @@ export class HadithService {
   }
 
   private mapHadithApi(d: any, book: string): Hadith {
+    const rawStatus = d.status ?? d.hadithStatus ?? d.grade ?? d.authenticity;
+    const status =
+      rawStatus != null && String(rawStatus).trim() !== '' ? String(rawStatus).trim() : undefined;
     return {
       id: d.id || Math.random(),
       hadithNumber: d.hadithNumber?.toString() || d.id?.toString() || '1',
@@ -79,11 +79,15 @@ export class HadithService {
       hadithUrdu: d.hadithUrdu || d.urdu || '',
       bookSlug: book,
       bookName: d.book?.bookName || this.getBookName(book),
-      chapterName: d.chapter?.chapterEnglish || d.chapterName || ''
+      chapterName: d.chapter?.chapterEnglish || d.chapterName || '',
+      status
     };
   }
 
   private mapSunnahHadith(d: any, book: string): Hadith {
+    const rawStatus = d.status ?? d.grade;
+    const status =
+      rawStatus != null && String(rawStatus).trim() !== '' ? String(rawStatus).trim() : undefined;
     return {
       id: d.hadithNumber || Math.random(),
       hadithNumber: d.hadithNumber?.toString() || '1',
@@ -93,11 +97,15 @@ export class HadithService {
       hadithUrdu: d.translation?.ur || '',
       bookSlug: book,
       bookName: this.getBookName(book),
-      chapterName: d.chapter?.title || d.book?.name || ''
+      chapterName: d.chapter?.title || d.book?.name || '',
+      status
     };
   }
 
   private mapHadith(d: any, book: string): Hadith {
+    const rawStatus = d.status ?? d.grade;
+    const status =
+      rawStatus != null && String(rawStatus).trim() !== '' ? String(rawStatus).trim() : undefined;
     return {
       id: Math.random(),
       hadithNumber: d.id || d.hadithNumber || '1',
@@ -107,7 +115,8 @@ export class HadithService {
       hadithUrdu: d.hadith_urdu || '',
       bookSlug: book,
       bookName: this.getBookName(book),
-      chapterName: d.chapterName || d.chapter || ''
+      chapterName: d.chapterName || d.chapter || '',
+      status
     };
   }
 
@@ -131,7 +140,8 @@ export class HadithService {
         hadithEnglish: 'The Messenger of Allah (ﷺ) said: "Actions are according to intentions, and everyone will get what was intended."',
         hadithArabic: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى',
         hadithUrdu: 'اعمال کا دارومدار نیتوں پر ہے اور ہر شخص کو وہی ملے گا جس کی اس نے نیت کی۔',
-        chapterName: 'How the Divine Revelation started'
+        chapterName: 'How the Divine Revelation started',
+        status: 'Sahih'
       },
       {
         id: 2, hadithNumber: '6018', bookSlug: 'sahih-bukhari', bookName: 'Sahih Al-Bukhari',
@@ -139,7 +149,8 @@ export class HadithService {
         hadithEnglish: 'The Prophet (ﷺ) said, "Whoever believes in Allah and the Last Day should speak good or keep silent."',
         hadithArabic: 'مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ',
         hadithUrdu: 'جو شخص اللہ اور آخرت کے دن پر ایمان رکھتا ہے وہ اچھی بات کہے یا خاموش رہے۔',
-        chapterName: 'Good Manners'
+        chapterName: 'Good Manners',
+        status: 'Sahih'
       },
       {
         id: 3, hadithNumber: '2442', bookSlug: 'sahih-muslim', bookName: 'Sahih Muslim',
@@ -147,7 +158,8 @@ export class HadithService {
         hadithEnglish: 'The Messenger of Allah (ﷺ) said: "Do not consider any act of kindness insignificant, even meeting your brother with a cheerful face."',
         hadithArabic: 'لَا تَحْقِرَنَّ مِنَ الْمَعْرُوفِ شَيْئًا وَلَوْ أَنْ تَلْقَى أَخَاكَ بِوَجْهٍ طَلْقٍ',
         hadithUrdu: 'کسی نیک کام کو حقیر مت سمجھو، چاہے تم اپنے بھائی سے خوشی کے ساتھ ملو۔',
-        chapterName: 'Virtue and Doing Good'
+        chapterName: 'Virtue and Doing Good',
+        status: 'Sahih'
       },
       {
         id: 4, hadithNumber: '55', bookSlug: 'sahih-bukhari', bookName: 'Sahih Al-Bukhari',
@@ -155,7 +167,8 @@ export class HadithService {
         hadithEnglish: 'A man asked the Prophet (ﷺ): "Which deed is the best?" He replied, "To offer the prayers at their early stated fixed times."',
         hadithArabic: 'أَيُّ الْعَمَلِ أَحَبُّ إِلَى اللَّه قَالَ الصَّلَاةُ عَلَى وَقْتِهَا',
         hadithUrdu: 'سب سے بہتر عمل کونسا ہے؟ آپ ﷺ نے فرمایا: نماز کو اس کے وقت پر ادا کرنا۔',
-        chapterName: 'Times of the Prayers'
+        chapterName: 'Times of the Prayers',
+        status: 'Sahih'
       },
       {
         id: 5, hadithNumber: '1', bookSlug: 'sahih-muslim', bookName: 'Sahih Muslim',
@@ -163,7 +176,8 @@ export class HadithService {
         hadithEnglish: 'The Messenger of Allah (ﷺ) said: "The strong man is not the one who can wrestle others down. The strong man is the one who can control himself when angry."',
         hadithArabic: 'لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ',
         hadithUrdu: 'پہلوان وہ نہیں جو لوگوں کو پچھاڑ دے، بلکہ پہلوان وہ ہے جو غصے کے وقت خود پر قابو رکھے۔',
-        chapterName: 'Virtue and Good Manners'
+        chapterName: 'Virtue and Good Manners',
+        status: 'Sahih'
       }
     ];
   }
