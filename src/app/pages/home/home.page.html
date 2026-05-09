@@ -4,7 +4,7 @@
       <ion-menu-button class="menu-btn"></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      <span class="app-title">نور <span class="app-title-en">NOOR</span></span>
+      <span class="app-title">Striving <span class="app-title-en">4 Jannah</span></span>
     </ion-title>
     <ion-buttons slot="end">
       <div class="header-decoration"></div>
@@ -16,6 +16,10 @@
   <!-- Hero: Clock + Date + Hijri -->
   <div class="hero-section pattern-bg">
     <div class="hero-basmala">{{ basmala }}</div>
+    <div class="hero-app-brand">
+      <div class="hero-app-striving">Striving</div>
+      <div class="hero-app-jannah">4 Jannah</div>
+    </div>
     <div class="hero-time">{{ formattedTime }}</div>
     <div class="hero-date">{{ formattedDate }}</div>
     <div class="hero-hijri" *ngIf="hijriDate">

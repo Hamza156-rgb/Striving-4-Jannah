@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.noor.islamicapp',
-  appName: 'Noor - نور',
+  appId: 'com.striving4jannah.app',
+  appName: 'Striving 4 Jannah',
   webDir: 'dist/noor-app/browser',
   server: {
     androidScheme: 'https'

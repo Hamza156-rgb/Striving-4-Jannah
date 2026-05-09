@@ -14,8 +14,23 @@ ion-content {
     background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%);
   }
   .app-logo { font-size: 52px; line-height: 1; margin-bottom: 8px; filter: drop-shadow(0 0 16px rgba(201,168,76,0.6)); }
-  .app-name { font-family: 'Scheherazade New', serif; font-size: 38px; color: #c9a84c; line-height: 1; }
-  .app-name-en { font-family: 'Cinzel', serif; font-size: 14px; color: #e8c97a; letter-spacing: 5px; margin-top: 4px; }
+  .app-name {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #f0e8d5;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+  }
+  .app-name-sub {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #25c79a;
+    letter-spacing: 3px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
   .app-tagline { font-size: 13px; color: #9aafcc; margin-top: 10px; }
   .app-version { font-size: 11px; color: #506480; margin-top: 6px; }
 }
