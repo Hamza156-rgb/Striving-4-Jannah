@@ -14,12 +14,8 @@
 
 <ion-content [fullscreen]="true">
   <!-- Hero: Clock + Date + Hijri -->
-  <div class="hero-section pattern-bg">
+  <div class="hero-section">
     <div class="hero-basmala">{{ basmala }}</div>
-    <div class="hero-app-brand">
-      <div class="hero-app-striving">Striving</div>
-      <div class="hero-app-jannah">4 Jannah</div>
-    </div>
     <div class="hero-time">{{ formattedTime }}</div>
     <div class="hero-date">{{ formattedDate }}</div>
     <div class="hero-hijri" *ngIf="hijriDate">

@@ -88,6 +88,11 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Avoid a different-colored strip behind the WebView / router shell on native */
+ion-app {
+  background: var(--noor-bg-primary);
+}
+
 /* ========================================
    SCROLLBAR STYLING
    ======================================== */
