@@ -22,9 +22,6 @@
   <div class="reader-controls">
     <button class="ctrl-btn" (click)="decreaseFontSize()">A−</button>
     <button class="ctrl-btn" (click)="increaseFontSize()">A+</button>
-    <button class="ctrl-btn trans-btn" (click)="toggleTranslation()">
-      {{ showTranslation ? 'Hide Trans.' : 'Show Trans.' }}
-    </button>
   </div>
 
   <!-- Surah Info Banner -->
@@ -56,8 +53,8 @@
       </div>
       <div class="ayah-content">
         <div class="ayah-arabic" [style.font-size]="fontSize + 'px'">{{ ayah.text }}</div>
-        <div class="ayah-divider" *ngIf="showTranslation && ayah.translation"></div>
-        <div class="ayah-translation" *ngIf="showTranslation && ayah.translation"
+        <div class="ayah-divider" *ngIf="ayah.translation"></div>
+        <div class="ayah-translation" *ngIf="ayah.translation"
              [class.urdu]="language === 'urdu'">
           {{ ayah.translation }}
         </div>
