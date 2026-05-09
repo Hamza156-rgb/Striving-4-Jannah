@@ -30,7 +30,9 @@ export class QuranService {
   constructor(private http: HttpClient) {}
 
   getSurahs(): Observable<Surah[]> {
-    return this.http.get<any>(`${this.base}/surah`).pipe(map(r => r.data));
+    return this.http.get<any>(`${this.base}/surah`).pipe(
+      map(r => (Array.isArray(r?.data) ? r.data : []) as Surah[])
+    );
   }
 
   getSurahWithTranslation(surahNum: number, lang: string): Observable<SurahDetail> {

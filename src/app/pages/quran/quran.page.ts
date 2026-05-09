@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonSearchbar, IonList, IonItem, IonLabel, IonSkeletonText, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/angular/standalone';
+import type { ViewWillEnter } from '@ionic/angular/common';
+import { finalize } from 'rxjs';
 import { QuranService, Surah } from '../../services/quran.service';
 
 @Component({
@@ -12,7 +14,10 @@ import { QuranService, Surah } from '../../services/quran.service';
   templateUrl: './quran.page.html',
   styleUrls: ['./quran.page.scss']
 })
-export class QuranPage implements OnInit {
+export class QuranPage implements OnInit, ViewWillEnter {
+  private quranService = inject(QuranService);
+  private cdr = inject(ChangeDetectorRef);
+
   surahs: Surah[] = [];
   filtered: Surah[] = [];
   searchTerm = '';
@@ -24,14 +29,33 @@ export class QuranPage implements OnInit {
     1: [1,2], 2: [2], 3: [2,3], 4: [3,4], 5: [4], 6: [4,5], 7: [5,6]
   };
 
-  constructor(private quranService: QuranService) {}
-
   ngOnInit() {
-    this.quranService.getSurahs().subscribe(s => {
-      this.surahs = s;
-      this.filtered = s;
-      this.loading = false;
-    });
+    this.quranService
+      .getSurahs()
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (s) => {
+          this.surahs = s;
+          this.applyFilter();
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.surahs = [];
+          this.applyFilter();
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  /** Re-sync list when returning to this tab (fixes first paint / Ionic outlet timing). */
+  ionViewWillEnter() {
+    if (!this.loading && this.surahs.length > 0) {
+      this.applyFilter();
+      this.cdr.detectChanges();
+    }
   }
 
   search(ev: any) {
@@ -42,6 +66,7 @@ export class QuranPage implements OnInit {
   setTab(tab: 'all' | 'meccan' | 'medinan') {
     this.activeTab = tab;
     this.applyFilter();
+    this.cdr.detectChanges();
   }
 
   applyFilter() {
