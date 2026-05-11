@@ -55,7 +55,20 @@
   </div>
 
   <div class="hadith-list" *ngIf="!loading">
-    <div class="hadith-card" *ngFor="let h of hadiths">
+    <div class="single-hadith-banner" *ngIf="hadithNumberHighlight && hadiths.length === 1 && !singleHadithNotFound">
+      <button type="button" class="browse-chapter-link" (click)="openFullChapter()">Show full chapter list</button>
+    </div>
+
+    <p class="hadith-list-empty" *ngIf="singleHadithNotFound">
+      No hadith #{{ hadithNumberHighlight }} in this book.
+    </p>
+
+    <div
+      class="hadith-card"
+      *ngFor="let h of hadiths"
+      [id]="'hadith-card-' + h.hadithNumber"
+      [class.hadith-card--search-hit]="hadithNumberHighlight && h.hadithNumber === hadithNumberHighlight"
+    >
       <div class="hadith-card-header">
         <div class="hadith-book">{{ h.bookName }}</div>
         <div class="hadith-header-right">
@@ -87,15 +100,12 @@
   </div>
 
   <ion-infinite-scroll
-    *ngIf="!loading"
+    *ngIf="!loading && !hadithNumberHighlight"
     threshold="140px"
     [disabled]="infiniteScrollDisabled"
     (ionInfinite)="onInfinite($event)"
   >
-    <ion-infinite-scroll-content
-      loadingSpinner="crescent"
-      loadingText="Loading hadiths…"
-    ></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
   <div class="page-pad"></div>

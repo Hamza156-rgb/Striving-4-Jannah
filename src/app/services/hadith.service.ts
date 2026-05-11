@@ -12,6 +12,8 @@ export interface Hadith {
   bookSlug: string;
   bookName: string;
   chapterName?: string;
+  /** Kitāb / chapter index in this book (from API `chapter.chapterNumber`) */
+  chapterNumber?: string;
   /** e.g. Sahih, Hasan, Da'if — from API `status` when present */
   status?: string;
 }
@@ -79,6 +81,31 @@ export class HadithService {
     );
   }
 
+  /**
+   * Fetch a single hadith in this book by its published hadith number (API `hadithNumber` query).
+   * Returns `null` if not found or on error — does not use fallback hadiths.
+   */
+  getHadithByNumber(book: string, hadithNumber: string): Observable<Hadith | null> {
+    const n = hadithNumber.trim();
+    if (!n) {
+      return of(null);
+    }
+    const url = `${this.base}/hadiths?apiKey=${this.apiKey}&book=${encodeURIComponent(book)}&hadithNumber=${encodeURIComponent(
+      n
+    )}&paginate=1&page=1`;
+    return this.http.get<any>(url).pipe(
+      map(r => {
+        const block = r?.hadiths;
+        const arr = Array.isArray(block?.data) ? block.data : [];
+        if (!arr.length) {
+          return null;
+        }
+        return this.mapHadithApi(arr[0], book);
+      }),
+      catchError(() => of(null))
+    );
+  }
+
   getRandomHadith(): Observable<Hadith> {
     const books = ['sahih-bukhari', 'sahih-muslim', 'abu-dawood', 'al-tirmidhi', 'sunan-nasai', 'ibn-e-majah'];
     const book = books[Math.floor(Math.random() * books.length)];
@@ -105,10 +132,12 @@ export class HadithService {
     const block = r?.hadiths;
     const arr = Array.isArray(block?.data) ? block.data : [];
     const hadiths = arr.filter((h: any) => h && typeof h === 'object').map((h: any) => this.mapHadithApi(h, book));
+    const currentPage = Number(block?.current_page);
+    const lastPage = Number(block?.last_page);
     return {
       hadiths,
-      currentPage: typeof block?.current_page === 'number' ? block.current_page : 1,
-      lastPage: typeof block?.last_page === 'number' ? block.last_page : 1
+      currentPage: Number.isFinite(currentPage) && currentPage > 0 ? currentPage : 1,
+      lastPage: Number.isFinite(lastPage) && lastPage > 0 ? lastPage : 1
     };
   }
 
@@ -127,6 +156,7 @@ export class HadithService {
     const rawStatus = d.status ?? d.hadithStatus ?? d.grade ?? d.authenticity;
     const status =
       rawStatus != null && String(rawStatus).trim() !== '' ? String(rawStatus).trim() : undefined;
+    const chNum = d.chapter?.chapterNumber;
     return {
       id: d.id || Math.random(),
       hadithNumber: d.hadithNumber?.toString() || d.id?.toString() || '1',
@@ -137,6 +167,7 @@ export class HadithService {
       bookSlug: book,
       bookName: d.book?.bookName || this.getBookName(book),
       chapterName: d.chapter?.chapterEnglish || d.chapterName || '',
+      chapterNumber: chNum != null && String(chNum).trim() !== '' ? String(chNum) : undefined,
       status
     };
   }

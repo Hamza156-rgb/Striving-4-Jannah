@@ -15,6 +15,28 @@
     <div class="hero-ar">أبواب الحديث</div>
     <div class="hero-en">Chapters (Kitāb)</div>
     <p class="hero-hint" *ngIf="!loading">Tap a chapter to read hadiths in this collection.</p>
+
+    <div class="hadith-search" *ngIf="!loading">
+      <label class="hadith-search-label" for="hadith-num-input">Hadith # in {{ bookTitle }}</label>
+      <div class="hadith-search-row">
+        <input
+          id="hadith-num-input"
+          class="hadith-search-input"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="e.g. 1, 6029"
+          [disabled]="searchBusy"
+          (keydown.enter)="searchHadith(numInput.value)"
+          #numInput
+        />
+        <button type="button" class="hadith-search-btn" [disabled]="searchBusy" (click)="searchHadith(numInput.value)">
+          <span *ngIf="!searchBusy">Go</span>
+          <ion-spinner *ngIf="searchBusy" name="crescent"></ion-spinner>
+        </button>
+      </div>
+      <p class="hadith-search-err" *ngIf="searchError">{{ searchError }}</p>
+    </div>
   </div>
 
   <div class="loading" *ngIf="loading">
