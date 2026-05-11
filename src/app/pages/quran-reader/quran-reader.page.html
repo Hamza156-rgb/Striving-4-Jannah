@@ -45,12 +45,17 @@
     </div>
   </div>
 
-  <!-- Ayahs -->
+  <!-- Ayahs: Share sits in the left column so it stays visible beside long RTL lines (web + native). -->
   <div class="ayah-list" *ngIf="!loading && detail">
     <div class="ayah-card" *ngFor="let ayah of detail.ayahs">
-      <div class="ayah-number">
-        <span>{{ ayah.numberInSurah }}</span>
-      </div>
+      <aside class="ayah-aside" aria-label="Ayah tools">
+        <div class="ayah-number">
+          <span>{{ ayah.numberInSurah }}</span>
+        </div>
+        <button type="button" class="ayah-share-btn" (click)="openAyahShare(ayah, $event)" aria-label="Share this ayah">
+          <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
+        </button>
+      </aside>
       <div class="ayah-content">
         <div class="ayah-arabic" [style.font-size]="fontSize + 'px'">{{ ayah.text }}</div>
         <div class="ayah-divider" *ngIf="ayah.translation"></div>

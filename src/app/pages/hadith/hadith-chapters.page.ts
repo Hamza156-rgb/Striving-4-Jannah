@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonSpinner } from '@ionic/angular/standalone';
+import type { ViewWillLeave } from '@ionic/angular/common';
 import { finalize } from 'rxjs';
 import { HadithChapter, HadithService } from '../../services/hadith.service';
 import { hadithBookTitle } from './hadith-books.meta';
@@ -22,7 +23,7 @@ import { hadithBookTitle } from './hadith-books.meta';
   templateUrl: './hadith-chapters.page.html',
   styleUrls: ['./hadith-chapters.page.scss']
 })
-export class HadithChaptersPage implements OnInit {
+export class HadithChaptersPage implements OnInit, ViewWillLeave {
   bookSlug = '';
   bookTitle = '';
   chapters: HadithChapter[] = [];
@@ -42,6 +43,13 @@ export class HadithChaptersPage implements OnInit {
     this.bookSlug = this.route.snapshot.paramMap.get('bookSlug') || '';
     this.bookTitle = hadithBookTitle(this.bookSlug);
     this.loadChapters();
+  }
+
+  ionViewWillLeave(): void {
+    const el = document.activeElement;
+    if (el instanceof HTMLElement) {
+      el.blur();
+    }
   }
 
   loadChapters(): void {

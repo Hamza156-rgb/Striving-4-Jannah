@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonSkeletonText, IonIcon } from '@ionic/angular/standalone';
-import type { ViewWillEnter } from '@ionic/angular/common';
+import type { ViewWillEnter, ViewWillLeave } from '@ionic/angular/common';
 import { finalize } from 'rxjs';
 import { QuranService, Surah } from '../../services/quran.service';
 
@@ -14,7 +14,7 @@ import { QuranService, Surah } from '../../services/quran.service';
   templateUrl: './quran.page.html',
   styleUrls: ['./quran.page.scss']
 })
-export class QuranPage implements OnInit, ViewWillEnter {
+export class QuranPage implements OnInit, ViewWillEnter, ViewWillLeave {
   private quranService = inject(QuranService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -55,6 +55,13 @@ export class QuranPage implements OnInit, ViewWillEnter {
     if (!this.loading && this.surahs.length > 0) {
       this.applyFilter();
       this.cdr.detectChanges();
+    }
+  }
+
+  ionViewWillLeave(): void {
+    const el = document.activeElement;
+    if (el instanceof HTMLElement) {
+      el.blur();
     }
   }
 

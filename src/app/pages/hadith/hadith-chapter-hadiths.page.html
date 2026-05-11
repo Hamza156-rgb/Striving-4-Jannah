@@ -72,6 +72,9 @@
       <div class="hadith-card-header">
         <div class="hadith-book">{{ h.bookName }}</div>
         <div class="hadith-header-right">
+          <button type="button" class="hadith-share-btn" (click)="openHadithShare(h, $event)" aria-label="Share this hadith">
+            <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
+          </button>
           <span class="hadith-status" *ngIf="h.status">{{ h.status }}</span>
           <span class="hadith-num"># {{ h.hadithNumber }}</span>
         </div>

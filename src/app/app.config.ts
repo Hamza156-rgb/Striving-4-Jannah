@@ -4,7 +4,19 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { addIcons } from 'ionicons';
-import { home, book, time, library, settings, searchOutline, closeCircle } from 'ionicons/icons';
+import {
+  home,
+  book,
+  time,
+  library,
+  settings,
+  searchOutline,
+  closeCircle,
+  closeOutline,
+  chatbubblesOutline,
+  imageOutline,
+  shareOutline
+} from 'ionicons/icons';
 
 addIcons({
   'home': home,
@@ -13,7 +25,11 @@ addIcons({
   'library': library,
   'settings': settings,
   'search-outline': searchOutline,
-  'close-circle': closeCircle
+  'close-circle': closeCircle,
+  'close-outline': closeOutline,
+  'chatbubbles-outline': chatbubblesOutline,
+  'image-outline': imageOutline,
+  'share-outline': shareOutline
 });
 
 export const appConfig: ApplicationConfig = {

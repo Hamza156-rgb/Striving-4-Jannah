@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription, combineLatest } from 'rxjs';
+import { ModalController } from '@ionic/angular';
 import {
   IonContent,
   IonHeader,
@@ -9,11 +10,15 @@ import {
   IonInfiniteScrollContent,
   IonTitle,
   IonSpinner,
-  IonToolbar
+  IonToolbar,
+  IonIcon,
+  ToastController
 } from '@ionic/angular/standalone';
 import { finalize } from 'rxjs';
 import { Hadith, HadithService } from '../../services/hadith.service';
 import { hadithBookTitle } from './hadith-books.meta';
+import { ShareContentService } from '../../services/share-content.service';
+import { ShareFormatPickerComponent } from '../../components/share-format-picker/share-format-picker.component';
 
 @Component({
   selector: 'app-hadith-chapter-hadiths',
@@ -27,7 +32,8 @@ import { hadithBookTitle } from './hadith-books.meta';
     IonInfiniteScrollContent,
     IonToolbar,
     IonTitle,
-    IonSpinner
+    IonSpinner,
+    IonIcon
   ],
   templateUrl: './hadith-chapter-hadiths.page.html',
   styleUrls: ['./hadith-chapter-hadiths.page.scss']
@@ -53,7 +59,10 @@ export class HadithChapterHadithsPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private hadithService: HadithService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private modalCtrl: ModalController,
+    private toastCtrl: ToastController,
+    private shareContent: ShareContentService
   ) {}
 
   ngOnInit(): void {
@@ -183,6 +192,93 @@ export class HadithChapterHadithsPage implements OnInit, OnDestroy {
 
   isRtl(): boolean {
     return this.language === 'arabic' || this.language === 'urdu';
+  }
+
+  async openHadithShare(h: Hadith, ev: Event): Promise<void> {
+    ev.stopPropagation();
+    ev.preventDefault();
+    this.blurActiveElement();
+    const modal = await this.modalCtrl.create({
+      component: ShareFormatPickerComponent,
+      componentProps: {
+        heading: 'Share this hadith',
+        hint: 'Send the hadith as plain text (WhatsApp, notes) or as a styled gold card image.'
+      },
+      cssClass: 'share-format-modal',
+      backdropDismiss: true,
+      showBackdrop: true
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss<{ choice?: 'text' | 'image' }>();
+    if (data?.choice === 'text') {
+      void this.shareHadithText(h);
+    } else if (data?.choice === 'image') {
+      void this.shareHadithImage(h);
+    }
+  }
+
+  private shareHadithMeaning(h: Hadith): string {
+    if (this.language === 'urdu') {
+      return (h.hadithUrdu || h.hadithEnglish || '').trim();
+    }
+    return (h.hadithEnglish || '').trim();
+  }
+
+  private async shareHadithText(h: Hadith): Promise<void> {
+    try {
+      const text = this.shareContent.buildHadithPlainText({
+        bookName: h.bookName,
+        hadithNumber: h.hadithNumber,
+        chapterName: h.chapterName,
+        narrator: h.englishNarrator,
+        arabic: h.hadithArabic?.trim() || undefined,
+        body: this.shareHadithMeaning(h)
+      });
+      await this.shareContent.sharePlainText(text);
+    } catch (e) {
+      await this.handleShareError(e);
+    }
+  }
+
+  private async shareHadithImage(h: Hadith): Promise<void> {
+    try {
+      await this.shareContent.shareHadithImage({
+        bookName: h.bookName,
+        hadithNumber: h.hadithNumber,
+        chapterName: h.chapterName,
+        narrator: h.englishNarrator,
+        arabic: h.hadithArabic?.trim() || undefined,
+        body: this.shareHadithMeaning(h),
+        rtl: this.isRtl()
+      });
+    } catch (e) {
+      await this.handleShareError(e);
+    }
+  }
+
+  private async handleShareError(e: unknown): Promise<void> {
+    if (this.shareContent.isCancelled(e)) return;
+    if (this.shareContent.isClipboardOk(e)) {
+      (await this.toastCtrl.create({ message: 'Copied to clipboard.', duration: 2200, color: 'success' })).present();
+      return;
+    }
+    if (this.shareContent.isDownloadFallback(e)) {
+      (await this.toastCtrl.create({
+        message: 'Image download started — check your downloads folder.',
+        duration: 2800,
+        color: 'success'
+      })).present();
+      return;
+    }
+    const msg = e instanceof Error ? e.message : 'Could not share.';
+    (await this.toastCtrl.create({ message: msg, duration: 2600, color: 'danger' })).present();
+  }
+
+  private blurActiveElement(): void {
+    const el = document.activeElement;
+    if (el instanceof HTMLElement) {
+      el.blur();
+    }
   }
 
   /** `?hadith=N`: show only that hadith (no chapter list / infinite scroll). */

@@ -1,0 +1,222 @@
+/* Fully custom sheet — no ion-button / ion-toolbar shadow limits */
+
+.sheet {
+  --background: #0a0e1a;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.sheet__frame {
+  position: relative;
+  margin: 0 auto;
+  max-width: 100%;
+  padding: 22px 20px 26px;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(30, 45, 69, 0.55) 0%, #0a0e1a 48%);
+  border-radius: 0 0 22px 22px;
+  box-sizing: border-box;
+}
+
+.sheet__accent {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, transparent, #c9a84c, #e8c97a, #c9a84c, transparent);
+  opacity: 0.9;
+}
+
+.sheet__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding-top: 4px;
+}
+
+.sheet__header-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.sheet__title {
+  margin: 0 0 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: #f5efe3;
+  line-height: 1.25;
+}
+
+.sheet__hint {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #8b9bb3;
+  font-weight: 400;
+}
+
+.sheet__close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(30, 45, 69, 0.95) 0%, rgba(18, 26, 46, 0.98) 100%);
+  color: #e8c97a;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.12s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.sheet__close:hover {
+  border-color: rgba(232, 201, 122, 0.65);
+  background: rgba(30, 45, 69, 1);
+}
+
+.sheet__close:active {
+  transform: scale(0.96);
+}
+
+.sheet__close ion-icon {
+  font-size: 1.55rem;
+  pointer-events: none;
+}
+
+.sheet__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sheet__btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding: 14px 16px;
+  min-height: 64px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sheet__btn:active {
+  transform: scale(0.99);
+}
+
+.sheet__btn-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.sheet__btn-icon ion-icon {
+  font-size: 1.45rem;
+  pointer-events: none;
+}
+
+.sheet__btn-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sheet__btn-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.sheet__btn-caption {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.88;
+}
+
+/* Outlined navy — matches reader cards */
+.sheet__btn--secondary {
+  background: linear-gradient(180deg, #162a45 0%, #101d32 100%);
+  border: 2px solid rgba(201, 168, 76, 0.42);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.sheet__btn--secondary .sheet__btn-icon {
+  background: rgba(201, 168, 76, 0.12);
+  color: #e8c97a;
+}
+
+.sheet__btn--secondary .sheet__btn-title {
+  color: #f0e8d5;
+}
+
+.sheet__btn--secondary .sheet__btn-caption {
+  color: #9aafcc;
+}
+
+.sheet__btn--secondary:hover {
+  border-color: rgba(232, 201, 122, 0.55);
+  box-shadow:
+    0 8px 26px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Gold primary — matches tab / accents */
+.sheet__btn--primary {
+  background: linear-gradient(135deg, #e8c97a 0%, #c9a84c 38%, #a68534 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 28px rgba(201, 168, 76, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.sheet__btn--primary .sheet__btn-icon {
+  background: rgba(10, 14, 26, 0.12);
+  color: #0a0e1a;
+}
+
+.sheet__btn--primary .sheet__btn-title {
+  color: #0a0e1a;
+}
+
+.sheet__btn--primary .sheet__btn-caption {
+  color: rgba(10, 14, 26, 0.72);
+}
+
+.sheet__btn--primary:hover {
+  box-shadow:
+    0 10px 32px rgba(201, 168, 76, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}

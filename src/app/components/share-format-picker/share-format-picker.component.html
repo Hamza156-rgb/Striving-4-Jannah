@@ -1,0 +1,37 @@
+<ion-content class="sheet" [fullscreen]="true" [scrollY]="false">
+  <div class="sheet__frame">
+    <div class="sheet__accent" aria-hidden="true"></div>
+
+    <header class="sheet__header">
+      <div class="sheet__header-copy">
+        <h2 class="sheet__title">{{ heading }}</h2>
+        <p class="sheet__hint">{{ hint }}</p>
+      </div>
+      <button type="button" class="sheet__close" (click)="dismissCancel()" aria-label="Close">
+        <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </header>
+
+    <div class="sheet__actions">
+      <button type="button" class="sheet__btn sheet__btn--secondary" (click)="pick('text')">
+        <span class="sheet__btn-icon" aria-hidden="true">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+        </span>
+        <span class="sheet__btn-label">
+          <span class="sheet__btn-title">Share as text</span>
+          <span class="sheet__btn-caption">WhatsApp, SMS, notes</span>
+        </span>
+      </button>
+
+      <button type="button" class="sheet__btn sheet__btn--primary" (click)="pick('image')">
+        <span class="sheet__btn-icon" aria-hidden="true">
+          <ion-icon name="image-outline"></ion-icon>
+        </span>
+        <span class="sheet__btn-label">
+          <span class="sheet__btn-title">Share as image</span>
+          <span class="sheet__btn-caption">Styled gold card</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</ion-content>
