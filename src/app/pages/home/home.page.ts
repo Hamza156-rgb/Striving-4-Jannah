@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
+import type { ViewWillEnter } from '@ionic/angular/common';
 import { Subscription } from 'rxjs';
 import { PrayerService, PrayerTimes } from '../../services/prayer.service';
 import { QuranService, Surah } from '../../services/quran.service';
@@ -15,7 +16,7 @@ import { SettingsService } from '../../services/settings.service';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
 })
-export class HomePage implements OnInit, OnDestroy {
+export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
   currentTime = new Date();
   prayerTimes: PrayerTimes | null = null;
   nextPrayer: any = null;
@@ -42,14 +43,23 @@ export class HomePage implements OnInit, OnDestroy {
     private prayerService: PrayerService,
     private quranService: QuranService,
     private hadithService: HadithService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.subs.push(
-      this.prayerService.currentTime$.subscribe(t => this.currentTime = t)
+      this.prayerService.currentTime$.subscribe(t => {
+        this.currentTime = t;
+        this.cdr.detectChanges();
+      })
     );
     this.loadData();
+  }
+
+  /** Re-paint when the Home tab becomes active (fixes first paint on native / Ionic outlet timing). */
+  ionViewWillEnter() {
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy() { this.subs.forEach(s => s.unsubscribe()); }
@@ -66,6 +76,7 @@ export class HomePage implements OnInit, OnDestroy {
               this.prayerTimes = pt;
               this.nextPrayer = this.prayerService.getNextPrayer(pt);
               this.currentPrayer = this.prayerService.getCurrentPrayer(pt);
+              this.cdr.detectChanges();
             });
         },
         () => this.loadByCity(s)
@@ -80,12 +91,14 @@ export class HomePage implements OnInit, OnDestroy {
         this.dailyVerse = d.ayahs[1];
         this.dailyVerse.surahName = 'Al-Fatiha';
       }
+      this.cdr.detectChanges();
     });
 
     // Load hadith
     this.subs.push(
       this.hadithService.getRandomHadith().subscribe(h => {
         this.dailyHadith = h;
+        this.cdr.detectChanges();
       })
     );
   }
@@ -96,6 +109,7 @@ export class HomePage implements OnInit, OnDestroy {
         this.prayerTimes = pt;
         this.nextPrayer = this.prayerService.getNextPrayer(pt);
         this.currentPrayer = this.prayerService.getCurrentPrayer(pt);
+        this.cdr.detectChanges();
       });
   }
 
