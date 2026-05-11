@@ -44,7 +44,10 @@
     <span class="loading-txt">Loading chapters…</span>
   </div>
 
-  <p class="err" *ngIf="error && !loading">{{ error }}</p>
+  <div class="err-wrap" *ngIf="error && !loading">
+    <p class="err">{{ error }}</p>
+    <button type="button" class="retry-btn" (click)="loadChapters()">Retry</button>
+  </div>
 
   <div class="chapter-list" *ngIf="!loading">
     <a

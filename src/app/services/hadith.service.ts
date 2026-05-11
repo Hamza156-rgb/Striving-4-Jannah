@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, of, catchError } from 'rxjs';
+import { Capacitor, CapacitorHttp } from '@capacitor/core';
+import { Observable, map, of, catchError, throwError, retry, from } from 'rxjs';
 
 export interface Hadith {
   id: number;
@@ -48,11 +49,33 @@ export class HadithService {
 
   constructor(private http: HttpClient) {}
 
+  private getJson<T>(url: string): Observable<T> {
+    // On Android/iOS, native HTTP avoids WebView network/CORS inconsistencies.
+    if (Capacitor.isNativePlatform()) {
+      return from(
+        CapacitorHttp.get({
+          url,
+          headers: { Accept: 'application/json' }
+        })
+      ).pipe(
+        map(res => {
+          const payload = res?.data;
+          if (typeof payload === 'string') {
+            return JSON.parse(payload) as T;
+          }
+          return payload as T;
+        })
+      );
+    }
+    return this.http.get<T>(url);
+  }
+
   getChapters(bookSlug: string): Observable<HadithChapter[]> {
     const url = `${this.base}/${encodeURIComponent(bookSlug)}/chapters?apiKey=${this.apiKey}`;
-    return this.http.get<{ chapters?: HadithChapter[] }>(url).pipe(
+    return this.getJson<{ chapters?: HadithChapter[] }>(url).pipe(
       map(r => (Array.isArray(r?.chapters) ? r.chapters : [])),
-      catchError(() => of([]))
+      retry(1),
+      catchError(err => throwError(() => err))
     );
   }
 
@@ -69,7 +92,7 @@ export class HadithService {
     if (options.chapter != null && options.chapter !== '') {
       url += `&chapter=${encodeURIComponent(options.chapter)}`;
     }
-    return this.http.get<any>(url).pipe(
+    return this.getJson<any>(url).pipe(
       map(r => this.mapHadithPage(r, book)),
       catchError(() =>
         of({
@@ -93,7 +116,7 @@ export class HadithService {
     const url = `${this.base}/hadiths?apiKey=${this.apiKey}&book=${encodeURIComponent(book)}&hadithNumber=${encodeURIComponent(
       n
     )}&paginate=1&page=1`;
-    return this.http.get<any>(url).pipe(
+    return this.getJson<any>(url).pipe(
       map(r => {
         const block = r?.hadiths;
         const arr = Array.isArray(block?.data) ? block.data : [];
@@ -111,7 +134,7 @@ export class HadithService {
     const book = books[Math.floor(Math.random() * books.length)];
     const randomPage = Math.floor(Math.random() * 200) + 1;
     const url = `${this.base}/hadiths?apiKey=${this.apiKey}&book=${encodeURIComponent(book)}&paginate=1&page=${randomPage}`;
-    return this.http.get<any>(url).pipe(
+    return this.getJson<any>(url).pipe(
       map(r => {
         const block = r?.hadiths;
         const row = block?.data?.[0];

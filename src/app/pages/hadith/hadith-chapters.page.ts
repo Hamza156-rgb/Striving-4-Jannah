@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonSpinner } from '@ionic/angular/standalone';
 import { finalize } from 'rxjs';
@@ -40,7 +41,13 @@ export class HadithChaptersPage implements OnInit {
   ngOnInit(): void {
     this.bookSlug = this.route.snapshot.paramMap.get('bookSlug') || '';
     this.bookTitle = hadithBookTitle(this.bookSlug);
+    this.loadChapters();
+  }
+
+  loadChapters(): void {
     this.loading = true;
+    this.error = '';
+    this.chapters = [];
     this.cdr.detectChanges();
     this.hadithService
       .getChapters(this.bookSlug)
@@ -59,8 +66,8 @@ export class HadithChaptersPage implements OnInit {
           }
           this.cdr.detectChanges();
         },
-        error: () => {
-          this.error = 'Could not load chapters.';
+        error: (err: unknown) => {
+          this.error = this.getChapterLoadErrorMessage(err);
           this.cdr.detectChanges();
         }
       });
@@ -75,6 +82,21 @@ export class HadithChaptersPage implements OnInit {
       return c.chapterArabic;
     }
     return c.chapterUrdu || '';
+  }
+
+  private getChapterLoadErrorMessage(err: unknown): string {
+    if (err instanceof HttpErrorResponse) {
+      if (err.status === 429) {
+        return 'Hadith API rate limit reached. Please wait 1 minute and try again.';
+      }
+      if (err.status === 0) {
+        return 'Could not reach Hadith API from this device. Check internet and try again.';
+      }
+      if (err.status >= 500) {
+        return 'Hadith API is temporarily unavailable. Please try again.';
+      }
+    }
+    return 'Could not load chapters. Please try again.';
   }
 
   searchHadith(raw: string): void {
