@@ -1,0 +1,138 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="qibla-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Home" class="qibla-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Qibla</ion-title>
+    <ion-buttons slot="end">
+      <a routerLink="/prayer-times" class="toolbar-link">Prayers</a>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="qibla-content">
+  <div class="qibla-wrap">
+    <p class="qibla-intro">
+      The Kaaba in Makkah is the direction of prayer. Below is the bearing from <strong>true north</strong> at your location.
+    </p>
+
+    <div class="source-pill" *ngIf="locationSource === 'settings' && !locationError">
+      Using saved city: <strong>{{ locationCaption }}</strong> — good for your area. Turn on <strong>location</strong> for your exact spot.
+    </div>
+
+    <p class="error" *ngIf="locationError">{{ locationError }}</p>
+
+    <!-- Big readout (similar clarity to standalone Qibla apps) -->
+    <section class="qibla-hero" *ngIf="qiblaBearing != null">
+      <div class="hero-line">
+        <span class="hero-degrees">{{ bearingLabel }}</span>
+        <span class="hero-dot">·</span>
+        <span class="hero-cardinal">{{ cardinalShort }}</span>
+      </div>
+      <div class="hero-long">{{ cardinalLong }}</div>
+      <div class="hero-sub">Qibla bearing (true north, clockwise)</div>
+    </section>
+
+    <div class="coords-block" *ngIf="lat != null && lng != null">
+      <div class="coords-label">Your location</div>
+      <div class="coords-value">{{ lat | number : '1.5-5' }}°, {{ lng | number : '1.5-5' }}°</div>
+      <p class="coords-live" *ngIf="locationSource === 'gps'">Bearing updates automatically while GPS is on and you move.</p>
+      <button type="button" class="text-btn" (click)="refreshLocation()" [disabled]="locationLoading">
+        {{ locationLoading ? 'Updating…' : 'Refresh' }}
+      </button>
+    </div>
+
+    <div class="compass-stack" *ngIf="qiblaBearing != null">
+      <div class="kaaba-target" aria-hidden="true">
+        <div class="kaaba-target-icon" role="img">🕋</div>
+        <div class="kaaba-target-caption">You want the arrow to point <strong>here</strong></div>
+        <div class="kaaba-target-chevron">▼</div>
+      </div>
+
+      <div class="compass-ring" [class.live]="needleDeg != null">
+        <svg class="degree-face" viewBox="0 0 200 200" aria-hidden="true">
+          <g transform="translate(100,100)">
+            <ng-container *ngFor="let deg of degreeMajorTicks">
+              <line
+                [attr.transform]="'rotate(' + deg + ')'"
+                x1="0"
+                y1="-94"
+                x2="0"
+                y2="-80"
+                stroke="rgba(201,168,76,0.4)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+            </ng-container>
+          </g>
+        </svg>
+
+        <div class="ring-n">N</div>
+        <div class="ring-e">E</div>
+        <div class="ring-s">S</div>
+        <div class="ring-w">W</div>
+        <div class="ring-dot"></div>
+
+        <div
+          class="needle"
+          *ngIf="needleDeg != null"
+          [style.transform]="'translate(-50%, -100%) rotate(' + needleDeg + 'deg)'"
+        >
+          <div class="needle-shaft"></div>
+          <div class="needle-head">
+            <div class="needle-kaaba" aria-hidden="true">🕋</div>
+            <div class="needle-tip"></div>
+          </div>
+        </div>
+        <div
+          class="needle needle-static"
+          *ngIf="needleDeg == null && qiblaBearing != null"
+          [style.transform]="'translate(-50%, -100%) rotate(' + staticArrowDeg + 'deg)'"
+        >
+          <div class="needle-shaft"></div>
+          <div class="needle-head">
+            <div class="needle-kaaba" aria-hidden="true">🕋</div>
+            <div class="needle-tip"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="facing-hint">
+        <span class="facing-arrow" aria-hidden="true">↑</span>
+        <span><strong>Top of the phone</strong> = the direction you are facing (hold it flat).</span>
+      </div>
+    </div>
+
+    <div class="instruction-card" *ngIf="qiblaBearing != null">
+      <ng-container *ngIf="needleDeg != null; else staticHow">
+        <strong>Live compass on.</strong> Turn slowly until the gold arrow points straight up toward the Kaaba — then you are facing Qibla.
+      </ng-container>
+      <ng-template #staticHow>
+        <strong>Compass not live yet.</strong> North is at the top of the circle. The gold arrow shows Qibla from north — turn your body until you
+        face that direction (or tap “Enable live compass” and line the arrow up under the Kaaba).
+      </ng-template>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="primary-btn" (click)="enableCompass()" *ngIf="!compassActive && qiblaBearing != null">
+        <ion-icon name="compass-outline" aria-hidden="true"></ion-icon>
+        Enable live compass
+      </button>
+      <p class="fine-print" *ngIf="compassDenied">
+        On iPhone, allow motion when prompted. If the arrow drifts, move the phone in a gentle figure-eight to calibrate.
+      </p>
+      <p class="fine-print" *ngIf="compassActive && !compassDenied">
+        Hold the phone flat. If the arrow does not move when you turn, calibrate with a figure-eight, then open this page again.
+      </p>
+    </div>
+
+    <details class="verify-details" *ngIf="qiblaBearing != null">
+      <summary>How to double-check this bearing</summary>
+      <ul class="verify-list">
+        <li>Compare this degree value with another Qibla tool using the same city or coordinates.</li>
+        <li>In a map app, measure direction from your pin to Masjid al-Haram — it should match (true north).</li>
+        <li>A handheld compass uses <em>magnetic</em> north; small differences from this screen are normal.</li>
+      </ul>
+    </details>
+  </div>
+</ion-content>

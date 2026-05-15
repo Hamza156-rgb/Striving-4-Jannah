@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, BehaviorSubject, interval } from 'rxjs';
+import { Observable, map, BehaviorSubject, interval, throwError } from 'rxjs';
 
 export interface PrayerTimes {
   Fajr: string;
@@ -47,6 +47,34 @@ export class PrayerService {
         location: `${lat.toFixed(2)}, ${lng.toFixed(2)}`,
         hijriDate: `${r.data.date.hijri.day} ${r.data.date.hijri.month.en} ${r.data.date.hijri.year} AH`
       }))
+    );
+  }
+
+  /**
+   * Resolve saved city + country to coordinates (for Qibla, etc.).
+   * Uses Open-Meteo geocoding (no API key). Use a 2-letter country code (e.g. PK) or full country name.
+   */
+  resolveCoordinatesByCity(city: string, country: string): Observable<{ lat: number; lng: number }> {
+    const c = city.trim();
+    const cc = country.trim();
+    if (!c || !cc) {
+      return throwError(() => new Error('invalid city/country'));
+    }
+    const params = new URLSearchParams({ name: c, count: '1' });
+    if (/^[A-Za-z]{2}$/.test(cc)) {
+      params.set('countryCode', cc.toUpperCase());
+    } else {
+      params.set('country', cc);
+    }
+    const url = `https://geocoding-api.open-meteo.com/v1/search?${params.toString()}`;
+    return this.http.get<{ results?: { latitude: number; longitude: number }[] }>(url).pipe(
+      map(r => {
+        const row = r.results?.[0];
+        if (row && typeof row.latitude === 'number' && typeof row.longitude === 'number') {
+          return { lat: row.latitude, lng: row.longitude };
+        }
+        throw new Error('city not found');
+      })
     );
   }
 

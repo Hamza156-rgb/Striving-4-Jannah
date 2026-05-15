@@ -29,6 +29,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
   basmala = 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ';
 
   quickLinks = [
+    { label: 'Qibla', icon: '🧭', route: '/qibla' },
     { label: 'Al-Fatiha', icon: '📖', route: '/quran/1' },
     { label: 'Al-Kahf', icon: '🕌', route: '/quran/18' },
     { label: 'Yaseen', icon: '⭐', route: '/quran/36' },

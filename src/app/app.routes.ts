@@ -37,6 +37,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/prayer-times/prayer-times.page').then(m => m.PrayerTimesPage)
       },
       {
+        path: 'qibla',
+        loadComponent: () => import('./pages/qibla/qibla.page').then(m => m.QiblaPage)
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./pages/settings/settings.page').then(m => m.SettingsPage)
       },

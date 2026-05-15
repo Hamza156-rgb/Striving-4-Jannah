@@ -6,6 +6,7 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
+  IonButtons,
   IonRefresher,
   IonRefresherContent,
   IonSpinner,
@@ -15,6 +16,7 @@ import {
   IonSelect,
   IonSelectOption
 } from '@ionic/angular/standalone';
+import { RouterLink } from '@angular/router';
 import { Observable, Subscription, finalize } from 'rxjs';
 import { PrayerService, PrayerTimes } from '../../services/prayer.service';
 import { SettingsService } from '../../services/settings.service';
@@ -24,11 +26,13 @@ import { SettingsService } from '../../services/settings.service';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     FormsModule,
     IonContent,
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonButtons,
     IonRefresher,
     IonRefresherContent,
     IonSpinner,
