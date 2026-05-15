@@ -33,7 +33,9 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
     { label: 'Al-Fatiha', icon: '📖', route: '/quran/1' },
     { label: 'Al-Kahf', icon: '🕌', route: '/quran/18' },
     { label: 'Yaseen', icon: '⭐', route: '/quran/36' },
-    { label: 'Al-Mulk', icon: '🌙', route: '/quran/67' }
+    { label: 'Al-Mulk', icon: '🌙', route: '/quran/67' },
+    { label: 'Rehman', icon: '🤲', route: '/quran/55' },
+    { label: 'Waqia', icon: '✨', route: '/quran/56' }
   ];
 
   prayerIcons: Record<string, string> = {
