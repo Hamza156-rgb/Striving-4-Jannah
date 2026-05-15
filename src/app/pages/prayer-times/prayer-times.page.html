@@ -1,9 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>أوقات الصلاة</ion-title>
-    <ion-buttons slot="end">
-      <a routerLink="/qibla" class="qibla-toolbar-link">Qibla</a>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,6 +19,15 @@
       <div class="np-time">{{ nextPrayer.time }}</div>
       <div class="np-left">{{ nextPrayer.timeLeft }}</div>
     </div>
+
+    <a routerLink="/qibla" class="qibla-card">
+      <span class="qibla-card-icon" aria-hidden="true">🧭</span>
+      <span class="qibla-card-text">
+        <span class="qibla-card-title">Qibla direction</span>
+        <span class="qibla-card-sub">Find the direction of prayer</span>
+      </span>
+      <span class="qibla-card-chevron" aria-hidden="true">›</span>
+    </a>
   </div>
 
   <!-- Location: GPS first; city/country uses Aladhan timingsByCity when you tap Go -->
