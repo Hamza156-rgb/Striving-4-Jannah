@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import type { ViewWillEnter } from '@ionic/angular/common';
 import { Subscription } from 'rxjs';
 import { PrayerService, PrayerTimes } from '../../services/prayer.service';
@@ -12,7 +12,7 @@ import { SettingsService } from '../../services/settings.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonMenuButton],
+  imports: [CommonModule, RouterModule, IonContent],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
 })

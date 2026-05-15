@@ -6,15 +6,7 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonButtons,
-  IonRefresher,
-  IonRefresherContent,
-  IonSpinner,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonSelect,
-  IonSelectOption
+  IonSpinner
 } from '@ionic/angular/standalone';
 import { RouterLink } from '@angular/router';
 import { Observable, Subscription, finalize } from 'rxjs';
@@ -32,15 +24,7 @@ import { SettingsService } from '../../services/settings.service';
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonButtons,
-    IonRefresher,
-    IonRefresherContent,
-    IonSpinner,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonSelect,
-    IonSelectOption
+    IonSpinner
   ],
   templateUrl: './prayer-times.page.html',
   styleUrls: ['./prayer-times.page.scss']
