@@ -14,6 +14,20 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/quran/quran.page').then(m => m.QuranPage)
       },
       {
+        path: 'quran/surahs',
+        loadComponent: () =>
+          import('./pages/quran-surah-list/quran-surah-list.page').then(m => m.QuranSurahListPage)
+      },
+      {
+        path: 'quran/mushaf',
+        loadComponent: () => import('./pages/quran-mushaf/quran-mushaf.page').then(m => m.QuranMushafPage)
+      },
+      {
+        path: 'quran/mushaf/:surahId',
+        loadComponent: () =>
+          import('./pages/quran-mushaf/quran-mushaf-reader.page').then(m => m.QuranMushafReaderPage)
+      },
+      {
         path: 'hadith',
         loadComponent: () => import('./pages/hadith/hadith-shell.page').then(m => m.HadithShellPage),
         children: [

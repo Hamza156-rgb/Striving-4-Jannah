@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/quran" text="Quran"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Read by Surah</ion-title>
+  </ion-toolbar>
+  <ion-toolbar class="search-toolbar">
+    <div class="surah-search-field" role="search">
+      <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+      <input
+        type="search"
+        class="surah-search-input"
+        placeholder="Search surahs…"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchModelChange()"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        inputmode="search"
+        enterkeyhint="search"
+      />
+      <button
+        *ngIf="searchTerm"
+        type="button"
+        class="surah-search-clear"
+        (click)="clearSearch()"
+        aria-label="Clear search"
+      >
+        <ion-icon name="close-circle" aria-hidden="true"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+  <ion-toolbar class="filter-toolbar">
+    <div class="tab-pills">
+      <button class="pill" [class.active]="activeTab === 'all'" (click)="setTab('all')">All</button>
+      <button class="pill" [class.active]="activeTab === 'meccan'" (click)="setTab('meccan')">Meccan</button>
+      <button class="pill" [class.active]="activeTab === 'medinan'" (click)="setTab('medinan')">Medinan</button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p class="list-intro">Ayah-by-ayah reading with translation.</p>
+
+  <div *ngIf="loading" class="surah-list">
+    <div class="surah-item skeleton" *ngFor="let s of skeletons()">
+      <ion-skeleton-text animated style="width:36px;height:36px;border-radius:50%;"></ion-skeleton-text>
+      <div class="skeleton-text">
+        <ion-skeleton-text animated style="width:60%;height:14px;border-radius:6px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width:40%;height:12px;border-radius:6px;margin-top:6px;"></ion-skeleton-text>
+      </div>
+      <ion-skeleton-text animated style="width:50px;height:22px;border-radius:6px;"></ion-skeleton-text>
+    </div>
+  </div>
+
+  <div class="surah-list" *ngIf="!loading">
+    <a class="surah-item" *ngFor="let s of filtered" [routerLink]="['/quran', s.number]">
+      <div class="surah-number-badge">
+        <span class="num">{{ s.number }}</span>
+      </div>
+      <div class="surah-info">
+        <div class="surah-english">{{ s.englishName }}</div>
+        <div class="surah-translation">{{ s.englishNameTranslation }}</div>
+        <div class="surah-meta">
+          <span class="revelation-type" [class.meccan]="s.revelationType === 'Meccan'">{{ s.revelationType }}</span>
+          <span class="ayah-count">{{ s.numberOfAyahs }} Ayahs</span>
+        </div>
+      </div>
+      <div class="surah-arabic-name">{{ s.name }}</div>
+    </a>
+
+    <div class="empty-state" *ngIf="filtered.length === 0">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-text">No surahs found</div>
+    </div>
+  </div>
+
+  <div style="height:20px"></div>
+</ion-content>

@@ -10,7 +10,7 @@
     "build:web": "ng build noor-app --configuration development",
     "cap:sync": "cap sync android",
     "android:assets": "capacitor-assets generate --android",
-    "android:debug": "ng build noor-app --configuration development && cap sync android && cd android && JAVA_HOME=\"${JAVA_HOME:-/usr/local/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home}\" ./gradlew assembleDebug"
+    "android:debug": "ng build noor-app --configuration development && cap sync android && export JAVA_HOME=\"${JAVA_HOME:-/usr/local/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home}\" && export PATH=\"$JAVA_HOME/bin:$PATH\" && cd android && ./gradlew assembleDebug && cd .. && mkdir -p dist && cp android/app/build/outputs/apk/debug/app-debug.apk dist/noor-app-debug.apk"
   },
   "private": true,
   "engines": {

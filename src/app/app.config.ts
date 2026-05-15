@@ -16,7 +16,8 @@ import {
   chatbubblesOutline,
   imageOutline,
   shareOutline,
-  compassOutline
+  compassOutline,
+  chevronDown
 } from 'ionicons/icons';
 
 addIcons({
@@ -31,7 +32,8 @@ addIcons({
   'chatbubbles-outline': chatbubblesOutline,
   'image-outline': imageOutline,
   'share-outline': shareOutline,
-  'compass-outline': compassOutline
+  'compass-outline': compassOutline,
+  'chevron-down': chevronDown
 });
 
 export const appConfig: ApplicationConfig = {

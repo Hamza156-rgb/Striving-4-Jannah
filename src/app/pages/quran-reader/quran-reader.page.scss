@@ -172,7 +172,39 @@ ion-back-button::part(native):active {
   }
 }
 
-.ayah-list { padding: 8px 0; }
+.ayah-list {
+  padding: 8px 0;
+}
+
+.ayah-list--loaded {
+  position: relative;
+}
+
+.ayah-list--translating {
+  pointer-events: none;
+
+  .ayah-card {
+    opacity: 0.45;
+  }
+}
+
+.translating-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 48px;
+  background: rgba(10, 14, 26, 0.35);
+  pointer-events: none;
+
+  ion-spinner {
+    color: #c9a84c;
+    width: 36px;
+    height: 36px;
+  }
+}
 
 .ayah-card {
   display: flex; gap: 14px; padding: 18px 16px;

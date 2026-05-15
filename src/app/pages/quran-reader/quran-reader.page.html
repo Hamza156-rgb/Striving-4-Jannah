@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/quran" color="medium"></ion-back-button>
+      <ion-back-button defaultHref="/quran/surahs" text="Surahs"></ion-back-button>
     </ion-buttons>
     <div class="reader-toolbar-heading" *ngIf="detail">
       <span class="reader-title">{{ detail.surah.englishName }}</span>
@@ -18,14 +18,12 @@
 </ion-header>
 
 <ion-content>
-  <!-- Controls -->
   <div class="reader-controls">
     <button class="ctrl-btn" (click)="decreaseFontSize()">A−</button>
     <button class="ctrl-btn" (click)="increaseFontSize()">A+</button>
   </div>
 
-  <!-- Surah Info Banner -->
-  <div class="surah-banner" *ngIf="detail && !loading">
+  <div class="surah-banner" *ngIf="detail">
     <div class="surah-banner-name">{{ detail.surah.name }}</div>
     <div class="surah-banner-english">{{ detail.surah.englishName }} — {{ detail.surah.englishNameTranslation }}</div>
     <div class="surah-banner-meta">
@@ -36,8 +34,7 @@
     </div>
   </div>
 
-  <!-- Loading -->
-  <div class="ayah-list" *ngIf="loading">
+  <div class="ayah-list" *ngIf="loading && !detail">
     <div class="ayah-skeleton" *ngFor="let s of skeletons()">
       <ion-skeleton-text animated style="width:80%;height:20px;border-radius:6px;margin-bottom:8px;"></ion-skeleton-text>
       <ion-skeleton-text animated style="width:100%;height:16px;border-radius:6px;"></ion-skeleton-text>
@@ -45,8 +42,11 @@
     </div>
   </div>
 
-  <!-- Ayahs: Share sits in the left column so it stays visible beside long RTL lines (web + native). -->
-  <div class="ayah-list" *ngIf="!loading && detail">
+  <div class="ayah-list ayah-list--loaded" *ngIf="detail" [class.ayah-list--translating]="translating">
+    <div class="translating-overlay" *ngIf="translating" aria-hidden="true">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+
     <div class="ayah-card" *ngFor="let ayah of detail.ayahs">
       <aside class="ayah-aside" aria-label="Ayah tools">
         <div class="ayah-number">
@@ -58,9 +58,12 @@
       </aside>
       <div class="ayah-content">
         <div class="ayah-arabic" [style.font-size]="fontSize + 'px'">{{ ayah.text }}</div>
-        <div class="ayah-divider" *ngIf="ayah.translation"></div>
-        <div class="ayah-translation" *ngIf="ayah.translation"
-             [class.urdu]="language === 'urdu'">
+        <div class="ayah-divider" *ngIf="language !== 'arabic' && ayah.translation"></div>
+        <div
+          class="ayah-translation"
+          *ngIf="language !== 'arabic' && ayah.translation"
+          [class.urdu]="language === 'urdu'"
+        >
           {{ ayah.translation }}
         </div>
       </div>

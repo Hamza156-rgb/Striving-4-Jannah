@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/quran/mushaf" text="Surahs"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="reader-toolbar-title" *ngIf="chapter">
+      <span class="reader-title">{{ chapter.nameSimple }}</span>
+      <span class="reader-arabic-title">{{ chapter.nameArabic }}</span>
+    </ion-title>
+    <ion-title *ngIf="!chapter && !loading">15 Line Quran</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="mushaf-reader-content">
+  <div *ngIf="loading" class="reader-loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading surah…</p>
+  </div>
+
+  <div *ngIf="!loading && !chapter" class="reader-error">
+    <p>Surah not found.</p>
+    <a routerLink="/quran/mushaf">Back to surah list</a>
+  </div>
+
+  <ng-container *ngIf="chapter">
+    <div class="reader-controls">
+      <button type="button" class="ctrl-btn" (click)="decreaseFontSize()" aria-label="Decrease text size">A−</button>
+      <span class="font-size-label">{{ fontSize }}px</span>
+      <button type="button" class="ctrl-btn" (click)="increaseFontSize()" aria-label="Increase text size">A+</button>
+    </div>
+
+    <div class="page-info">
+      <span>Mushaf page <strong>{{ page }}</strong></span>
+      <span class="dot">·</span>
+      <span>Page {{ pageIndexInSurah }} of {{ pagesInSurah }} in this surah</span>
+      <span class="dot" *ngIf="juzLabel">·</span>
+      <span *ngIf="juzLabel">Juz {{ juzNumber }} ({{ juzLabel }})</span>
+      <span class="dot" *ngIf="ayahRangeLabel">·</span>
+      <span *ngIf="ayahRangeLabel"><strong>{{ ayahRangeLabel }}</strong> on this page</span>
+    </div>
+
+    <div class="mushaf-page-wrap">
+      <ion-spinner *ngIf="pageContentLoading" name="crescent" class="page-spinner"></ion-spinner>
+
+      <div class="mushaf-page-sheet" *ngIf="!pageContentLoading && !pageContentError" [style.--mushaf-font-size.px]="fontSize">
+        <div class="sheet-meta">
+          <span class="sheet-juz">جزء {{ juzNumber }}</span>
+          <span class="sheet-juz-label" *ngIf="juzLabel">{{ juzLabel }}</span>
+        </div>
+
+        <div class="sheet-surah-banner" *ngIf="showSurahBannerOnPage && sheetSurahTitle">
+          <span class="sheet-surah-name">{{ sheetSurahTitle }}</span>
+        </div>
+
+        <p class="mushaf-ayah-flow" dir="rtl" lang="ar" [style.font-size.px]="fontSize">
+          <span
+            *ngFor="let v of pageVerses"
+            class="mushaf-ayah"
+            [attr.data-verse-key]="v.verseKey"
+          >
+            <span class="mushaf-ayah-text">{{ v.textUthmani }}</span>
+            <span
+              class="ayah-marker"
+              [attr.title]="v.verseKey"
+              [attr.aria-label]="'Ayah ' + v.verseNumber + ', ' + v.verseKey"
+            >
+              <span class="ayah-marker-num">{{ ayahIndic(v.verseNumber) }}</span>
+            </span>
+          </span>
+        </p>
+      </div>
+
+      <div class="page-fallback" *ngIf="!pageContentLoading && pageContentError">
+        <p>Could not load page text.</p>
+        <img
+          class="mushaf-page-img-fallback"
+          [src]="pageImageUrl"
+          [alt]="chapter.nameSimple + ', mushaf page ' + page"
+        />
+      </div>
+    </div>
+
+    <div class="reader-actions">
+      <button type="button" class="ctrl-btn" (click)="goPrev()" [disabled]="page <= pageMin">
+        ‹ Previous
+      </button>
+      <button type="button" class="ctrl-btn ctrl-btn--primary" (click)="toggleAutoScroll()" [class.active]="autoScroll">
+        {{ autoScroll ? 'Stop scroll' : 'Auto scroll' }}
+      </button>
+      <button type="button" class="ctrl-btn" (click)="goNext()" [disabled]="page >= pageMax">
+        Next ›
+      </button>
+    </div>
+
+    <label class="page-slider-label">
+      Jump to page in this surah ({{ pageMin }}–{{ pageMax }})
+      <input
+        type="range"
+        class="page-slider"
+        [min]="pageMin"
+        [max]="pageMax"
+        [value]="page"
+        (input)="onPageSlider($event)"
+      />
+    </label>
+  </ng-container>
+</ion-content>

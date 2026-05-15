@@ -2,76 +2,25 @@
   <ion-toolbar>
     <ion-title>القرآن الكريم</ion-title>
   </ion-toolbar>
-  <ion-toolbar class="search-toolbar">
-    <div class="surah-search-field" role="search">
-      <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
-      <input
-        type="search"
-        class="surah-search-input"
-        placeholder="Search surahs…"
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="onSearchModelChange()"
-        autocomplete="off"
-        autocorrect="off"
-        spellcheck="false"
-        inputmode="search"
-        enterkeyhint="search"
-      />
-      <button
-        *ngIf="searchTerm"
-        type="button"
-        class="surah-search-clear"
-        (click)="clearSearch()"
-        aria-label="Clear search"
-      >
-        <ion-icon name="close-circle" aria-hidden="true"></ion-icon>
-      </button>
-    </div>
-  </ion-toolbar>
-  <ion-toolbar class="filter-toolbar">
-    <div class="tab-pills">
-      <button class="pill" [class.active]="activeTab==='all'" (click)="setTab('all')">All</button>
-      <button class="pill" [class.active]="activeTab==='meccan'" (click)="setTab('meccan')">Meccan</button>
-      <button class="pill" [class.active]="activeTab==='medinan'" (click)="setTab('medinan')">Medinan</button>
-    </div>
-  </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <!-- Loading Skeletons -->
-  <div *ngIf="loading" class="surah-list">
-    <div class="surah-item skeleton" *ngFor="let s of skeletons()">
-      <ion-skeleton-text animated style="width:36px;height:36px;border-radius:50%;"></ion-skeleton-text>
-      <div class="skeleton-text">
-        <ion-skeleton-text animated style="width:60%;height:14px;border-radius:6px;"></ion-skeleton-text>
-        <ion-skeleton-text animated style="width:40%;height:12px;border-radius:6px;margin-top:6px;"></ion-skeleton-text>
-      </div>
-      <ion-skeleton-text animated style="width:50px;height:22px;border-radius:6px;"></ion-skeleton-text>
+<ion-content class="quran-hub-content">
+  <p class="hub-intro">Choose how you want to read the Quran.</p>
+
+  <section class="quran-mode-section" aria-label="Quran reading modes">
+    <div class="quran-mode-cards">
+      <a class="quran-mode-card" routerLink="/quran/surahs">
+        <span class="mode-icon" aria-hidden="true">📖</span>
+        <span class="mode-title">Read by Surah</span>
+        <span class="mode-desc">Ayah-by-ayah with translation</span>
+        <span class="mode-action">Open surah list ›</span>
+      </a>
+      <a class="quran-mode-card" routerLink="/quran/mushaf">
+        <span class="mode-icon" aria-hidden="true">📕</span>
+        <span class="mode-title">15 Line Quran</span>
+        <span class="mode-desc">Page-by-page mushaf reading</span>
+        <span class="mode-action">Open mushaf ›</span>
+      </a>
     </div>
-  </div>
-
-  <!-- Surah List -->
-  <div class="surah-list" *ngIf="!loading">
-    <a class="surah-item" *ngFor="let s of filtered" [routerLink]="['/quran', s.number]">
-      <div class="surah-number-badge">
-        <span class="num">{{ s.number }}</span>
-      </div>
-      <div class="surah-info">
-        <div class="surah-english">{{ s.englishName }}</div>
-        <div class="surah-translation">{{ s.englishNameTranslation }}</div>
-        <div class="surah-meta">
-          <span class="revelation-type" [class.meccan]="s.revelationType==='Meccan'">{{ s.revelationType }}</span>
-          <span class="ayah-count">{{ s.numberOfAyahs }} Ayahs</span>
-        </div>
-      </div>
-      <div class="surah-arabic-name">{{ s.name }}</div>
-    </a>
-
-    <div class="empty-state" *ngIf="filtered.length === 0">
-      <div class="empty-icon">🔍</div>
-      <div class="empty-text">No surahs found</div>
-    </div>
-  </div>
-
-  <div style="height:20px"></div>
+  </section>
 </ion-content>
